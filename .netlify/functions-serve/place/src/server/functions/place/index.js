@@ -26548,13 +26548,13 @@ var require_lib3 = __commonJS({
   }
 });
 
-// functions/place/index.ts
+// server/functions/place/index.ts
 var place_exports = {};
 __export(place_exports, {
   handler: () => handler
 });
 
-// database/mongo.ts
+// server/database/mongo.ts
 var { MongoClient } = require_lib3();
 var cachedDb = null;
 var connectToDatabase = async () => {
@@ -26568,7 +26568,7 @@ var connectToDatabase = async () => {
   return cachedDb;
 };
 
-// functions/place/index.ts
+// server/functions/place/index.ts
 var handler = async function() {
   const db = await connectToDatabase();
   return {

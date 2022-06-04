@@ -1,1 +1,1 @@
-module.exports = require('./src/functions/place/index.js')
+module.exports = require('./src/server/functions/place/index.js')

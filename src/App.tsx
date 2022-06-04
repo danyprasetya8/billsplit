@@ -5,7 +5,14 @@ import axios from 'axios'
 
 const App = () => {
   useEffect(() => {
-    axios.get('http://localhost:8888/.netlify/functions/place')
+    const fetchData = async () => {
+      try {
+        console.log(await axios.get('http://localhost:8888/.netlify/functions/place'))
+      } catch (err) {
+        console.log(err, 'err');
+      }
+    }
+    fetchData()
   }, [])
   return (
     <div className="App">
