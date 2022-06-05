@@ -7,7 +7,7 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(await axios.get('http://localhost:8888/.netlify/functions/place'))
+        console.log(await axios.get('http://localhost:8888/.netlify/functions/place?page=2'))
       } catch (err) {
         console.log(err, 'err');
       }

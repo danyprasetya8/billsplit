@@ -1,13 +1,11 @@
 import { Handler } from '@netlify/functions'
 import { connectToDatabase } from '../../database/mongo'
+import getPlaces from './get-places'
 
-const handler: Handler = async function() {
+const handler: Handler = async function({ httpMethod, queryStringParameters }) {
   const db = await connectToDatabase()
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      data: 'test'
-    })
+  if (httpMethod === 'GET') {
+    return getPlaces(db, queryStringParameters)
   }
 }
 

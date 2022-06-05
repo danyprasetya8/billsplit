@@ -26568,15 +26568,57 @@ var connectToDatabase = async () => {
   return cachedDb;
 };
 
-// server/functions/place/index.ts
-var handler = async function() {
-  const db = await connectToDatabase();
+// server/constant/index.ts
+var ITEM_PER_PAGE = 10;
+
+// server/constant/collection.ts
+var PLACES = "places";
+
+// server/repository/PlaceRepository.ts
+var PlaceRepository = class {
+  constructor(db) {
+    this.collection = db.collection(PLACES);
+  }
+  async findPaginated(page) {
+    return await this.collection.find().skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  }
+  async getTotalPage() {
+    const total = await this.collection.countDocuments();
+    return Math.ceil(total / ITEM_PER_PAGE);
+  }
+};
+var PlaceRepository_default = PlaceRepository;
+
+// server/functions/place/get-places.ts
+var getPlaces = async (db, queryStringParameters) => {
+  const { page } = queryStringParameters;
+  const placeRepository = new PlaceRepository_default(db);
+  const places = await placeRepository.findPaginated(page);
+  const totalPage = await placeRepository.getTotalPage();
+  const placesResponse = {
+    data: places.map((place) => ({
+      id: place._id.toString(),
+      name: place.name
+    })),
+    paging: {
+      page: +page,
+      itemPerPage: ITEM_PER_PAGE,
+      totalPage
+    }
+  };
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      data: "test"
-    })
+    body: JSON.stringify(placesResponse)
   };
+};
+var get_places_default = getPlaces;
+
+// server/functions/place/index.ts
+var handler = async function({ httpMethod, queryStringParameters }) {
+  const db = await connectToDatabase();
+  if (httpMethod === "GET") {
+    return get_places_default(db, queryStringParameters);
+  }
 };
 module.exports = __toCommonJS(place_exports);
 // Annotate the CommonJS export names for ESM import in node:
