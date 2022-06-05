@@ -6,7 +6,7 @@ export enum TaxPriority {
 }
 
 export interface Place {
-  _id?: ObjectId
+  _id?: ObjectId | string
   name: string,
   percentage: {
     tax: Double,
@@ -16,7 +16,7 @@ export interface Place {
 }
 
 export interface Menu {
-  _id: ObjectId,
+  _id: ObjectId | string,
   name: string,
   price: Long,
   placeId: ObjectId

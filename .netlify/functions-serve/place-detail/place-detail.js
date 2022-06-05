@@ -1,0 +1,1 @@
+module.exports = require('./src/server/functions/place-detail/index.js')
