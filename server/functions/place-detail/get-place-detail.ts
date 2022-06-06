@@ -1,14 +1,7 @@
 import * as mongodb from 'mongodb'
-import { Menu, TaxPriority } from '../../interface/entity'
+import { TaxPriority } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
-import MenuRepository from '../../repository/MenuRepository'
-
-interface GetMenuWebResponse {
-  id: string,
-  name: string,
-  price: number
-}
 
 interface GetPlaceDetailResponse {
   name: string,
@@ -16,19 +9,16 @@ interface GetPlaceDetailResponse {
     tax: number,
     service: number
   },
-  taxPriority: TaxPriority,
-  menus: GetMenuWebResponse[]
+  taxPriority: TaxPriority
 }
 
 const getPlaceDetail = async (db: mongodb.Db, queryStringParameters) => { 
   const { placeId } = queryStringParameters
 
   const placeRepository = new PlaceRepository(db)
-  const menuRepository = new MenuRepository(db)
 
   const placeIdObject = new mongodb.ObjectId(placeId)
   const { name, percentage, taxPriority } = await placeRepository.findById(placeIdObject)
-  const menus = await menuRepository.findAll(placeIdObject)
 
   const placeResponse: BaseResponse<GetPlaceDetailResponse> = {
     data: {
@@ -37,12 +27,7 @@ const getPlaceDetail = async (db: mongodb.Db, queryStringParameters) => {
         tax: +percentage.tax,
         service: +percentage.service
       },
-      taxPriority,
-      menus: menus.map((menu: Menu) => ({
-        id: menu._id.toString(),
-        name: menu.name,
-        price: +menu.price
-      }))
+      taxPriority
     }
   }
 

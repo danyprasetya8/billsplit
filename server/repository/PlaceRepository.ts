@@ -1,4 +1,4 @@
-import { Collection, Db, Filter, ObjectId } from 'mongodb'
+import { Collection, Db, Filter, ObjectId, UpdateResult } from 'mongodb'
 import { ITEM_PER_PAGE } from '../constant'
 import { PLACES } from '../constant/collection'
 import { Place } from '../interface/entity'
@@ -28,6 +28,16 @@ class PlaceRepository {
   public async getTotalPage(): Promise<number> {
     const total = await this.places.countDocuments()
     return Math.ceil(total / ITEM_PER_PAGE)
+  }
+
+  public async save(place: Place): Promise<string | ObjectId> {
+    const result = await this.places.insertOne(place)
+    return result.insertedId
+  }
+
+  public async update(placeId: ObjectId, place: Partial<Place>): Promise<UpdateResult> {
+    const query: Filter<Place> = { _id: placeId }
+    return await this.places.updateOne(query, { $set: place })
   }
 }
 

@@ -1,9 +1,11 @@
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
 var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
@@ -34,6 +36,9 @@ var __reExport = (target, module2, copyDefault, desc) => {
         __defProp(target, key, { get: () => module2[key], enumerable: !(desc = __getOwnPropDesc(module2, key)) || desc.enumerable });
   }
   return target;
+};
+var __toESM = (module2, isNodeMode) => {
+  return __reExport(__markAsModule(__defProp(module2 != null ? __create(__getProtoOf(module2)) : {}, "default", !isNodeMode && module2 && module2.__esModule ? { get: () => module2.default, enumerable: true } : { value: module2, enumerable: true })), module2);
 };
 var __toCommonJS = /* @__PURE__ */ ((cache) => {
   return (module2, temp) => {
@@ -2547,10 +2552,10 @@ var require_objectid = __commonJS({
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
     var PROCESS_UNIQUE = null;
     var kId = Symbol("id");
-    var ObjectId = function() {
-      function ObjectId2(inputId) {
-        if (!(this instanceof ObjectId2))
-          return new ObjectId2(inputId);
+    var ObjectId2 = function() {
+      function ObjectId3(inputId) {
+        if (!(this instanceof ObjectId3))
+          return new ObjectId3(inputId);
         var workingId;
         if (typeof inputId === "object" && inputId && "id" in inputId) {
           if (typeof inputId.id !== "string" && !ArrayBuffer.isView(inputId.id)) {
@@ -2565,7 +2570,7 @@ var require_objectid = __commonJS({
           workingId = inputId;
         }
         if (workingId == null || typeof workingId === "number") {
-          this[kId] = ObjectId2.generate(typeof workingId === "number" ? workingId : void 0);
+          this[kId] = ObjectId3.generate(typeof workingId === "number" ? workingId : void 0);
         } else if (ArrayBuffer.isView(workingId) && workingId.byteLength === 12) {
           this[kId] = workingId instanceof buffer_1.Buffer ? workingId : ensure_buffer_1.ensureBuffer(workingId);
         } else if (typeof workingId === "string") {
@@ -2584,24 +2589,24 @@ var require_objectid = __commonJS({
         } else {
           throw new error_1.BSONTypeError("Argument passed in does not match the accepted types");
         }
-        if (ObjectId2.cacheHexString) {
+        if (ObjectId3.cacheHexString) {
           this.__id = this.id.toString("hex");
         }
       }
-      Object.defineProperty(ObjectId2.prototype, "id", {
+      Object.defineProperty(ObjectId3.prototype, "id", {
         get: function() {
           return this[kId];
         },
         set: function(value) {
           this[kId] = value;
-          if (ObjectId2.cacheHexString) {
+          if (ObjectId3.cacheHexString) {
             this.__id = value.toString("hex");
           }
         },
         enumerable: false,
         configurable: true
       });
-      Object.defineProperty(ObjectId2.prototype, "generationTime", {
+      Object.defineProperty(ObjectId3.prototype, "generationTime", {
         get: function() {
           return this.id.readInt32BE(0);
         },
@@ -2611,24 +2616,24 @@ var require_objectid = __commonJS({
         enumerable: false,
         configurable: true
       });
-      ObjectId2.prototype.toHexString = function() {
-        if (ObjectId2.cacheHexString && this.__id) {
+      ObjectId3.prototype.toHexString = function() {
+        if (ObjectId3.cacheHexString && this.__id) {
           return this.__id;
         }
         var hexString = this.id.toString("hex");
-        if (ObjectId2.cacheHexString && !this.__id) {
+        if (ObjectId3.cacheHexString && !this.__id) {
           this.__id = hexString;
         }
         return hexString;
       };
-      ObjectId2.getInc = function() {
-        return ObjectId2.index = (ObjectId2.index + 1) % 16777215;
+      ObjectId3.getInc = function() {
+        return ObjectId3.index = (ObjectId3.index + 1) % 16777215;
       };
-      ObjectId2.generate = function(time) {
+      ObjectId3.generate = function(time) {
         if (typeof time !== "number") {
           time = Math.floor(Date.now() / 1e3);
         }
-        var inc = ObjectId2.getInc();
+        var inc = ObjectId3.getInc();
         var buffer = buffer_1.Buffer.alloc(12);
         buffer.writeUInt32BE(time, 0);
         if (PROCESS_UNIQUE === null) {
@@ -2644,28 +2649,28 @@ var require_objectid = __commonJS({
         buffer[9] = inc >> 16 & 255;
         return buffer;
       };
-      ObjectId2.prototype.toString = function(format) {
+      ObjectId3.prototype.toString = function(format) {
         if (format)
           return this.id.toString(format);
         return this.toHexString();
       };
-      ObjectId2.prototype.toJSON = function() {
+      ObjectId3.prototype.toJSON = function() {
         return this.toHexString();
       };
-      ObjectId2.prototype.equals = function(otherId) {
+      ObjectId3.prototype.equals = function(otherId) {
         if (otherId === void 0 || otherId === null) {
           return false;
         }
-        if (otherId instanceof ObjectId2) {
+        if (otherId instanceof ObjectId3) {
           return this[kId][11] === otherId[kId][11] && this[kId].equals(otherId[kId]);
         }
-        if (typeof otherId === "string" && ObjectId2.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
+        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
           return otherId === buffer_1.Buffer.prototype.toString.call(this.id, "latin1");
         }
-        if (typeof otherId === "string" && ObjectId2.isValid(otherId) && otherId.length === 24) {
+        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 24) {
           return otherId.toLowerCase() === this.toHexString();
         }
-        if (typeof otherId === "string" && ObjectId2.isValid(otherId) && otherId.length === 12) {
+        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 12) {
           return buffer_1.Buffer.from(otherId).equals(this.id);
         }
         if (typeof otherId === "object" && "toHexString" in otherId && typeof otherId.toHexString === "function") {
@@ -2675,75 +2680,75 @@ var require_objectid = __commonJS({
         }
         return false;
       };
-      ObjectId2.prototype.getTimestamp = function() {
+      ObjectId3.prototype.getTimestamp = function() {
         var timestamp = new Date();
         var time = this.id.readUInt32BE(0);
         timestamp.setTime(Math.floor(time) * 1e3);
         return timestamp;
       };
-      ObjectId2.createPk = function() {
-        return new ObjectId2();
+      ObjectId3.createPk = function() {
+        return new ObjectId3();
       };
-      ObjectId2.createFromTime = function(time) {
+      ObjectId3.createFromTime = function(time) {
         var buffer = buffer_1.Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         buffer.writeUInt32BE(time, 0);
-        return new ObjectId2(buffer);
+        return new ObjectId3(buffer);
       };
-      ObjectId2.createFromHexString = function(hexString) {
+      ObjectId3.createFromHexString = function(hexString) {
         if (typeof hexString === "undefined" || hexString != null && hexString.length !== 24) {
           throw new error_1.BSONTypeError("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         }
-        return new ObjectId2(buffer_1.Buffer.from(hexString, "hex"));
+        return new ObjectId3(buffer_1.Buffer.from(hexString, "hex"));
       };
-      ObjectId2.isValid = function(id) {
+      ObjectId3.isValid = function(id) {
         if (id == null)
           return false;
         try {
-          new ObjectId2(id);
+          new ObjectId3(id);
           return true;
         } catch (_a) {
           return false;
         }
       };
-      ObjectId2.prototype.toExtendedJSON = function() {
+      ObjectId3.prototype.toExtendedJSON = function() {
         if (this.toHexString)
           return { $oid: this.toHexString() };
         return { $oid: this.toString("hex") };
       };
-      ObjectId2.fromExtendedJSON = function(doc) {
-        return new ObjectId2(doc.$oid);
+      ObjectId3.fromExtendedJSON = function(doc) {
+        return new ObjectId3(doc.$oid);
       };
-      ObjectId2.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      ObjectId3.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      ObjectId2.prototype.inspect = function() {
+      ObjectId3.prototype.inspect = function() {
         return 'new ObjectId("' + this.toHexString() + '")';
       };
-      ObjectId2.index = Math.floor(Math.random() * 16777215);
-      return ObjectId2;
+      ObjectId3.index = Math.floor(Math.random() * 16777215);
+      return ObjectId3;
     }();
-    exports.ObjectId = ObjectId;
-    Object.defineProperty(ObjectId.prototype, "generate", {
+    exports.ObjectId = ObjectId2;
+    Object.defineProperty(ObjectId2.prototype, "generate", {
       value: utils_1.deprecate(function(time) {
-        return ObjectId.generate(time);
+        return ObjectId2.generate(time);
       }, "Please use the static `ObjectId.generate(time)` instead")
     });
-    Object.defineProperty(ObjectId.prototype, "getInc", {
+    Object.defineProperty(ObjectId2.prototype, "getInc", {
       value: utils_1.deprecate(function() {
-        return ObjectId.getInc();
+        return ObjectId2.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId.prototype, "get_inc", {
+    Object.defineProperty(ObjectId2.prototype, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId.getInc();
+        return ObjectId2.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId, "get_inc", {
+    Object.defineProperty(ObjectId2, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId.getInc();
+        return ObjectId2.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId.prototype, "_bsontype", { value: "ObjectID" });
+    Object.defineProperty(ObjectId2.prototype, "_bsontype", { value: "ObjectID" });
   }
 });
 
@@ -11989,7 +11994,7 @@ var require_db = __commonJS({
       "compression",
       "retryWrites"
     ];
-    var Db = class {
+    var Db2 = class {
       constructor(client, databaseName, options) {
         var _a;
         options = options !== null && options !== void 0 ? options : {};
@@ -12157,13 +12162,13 @@ var require_db = __commonJS({
         return this.s.logger;
       }
     };
-    exports.Db = Db;
-    Db.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
-    Db.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
-    Db.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
-    Db.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
-    Db.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
-    Db.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
+    exports.Db = Db2;
+    Db2.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
+    Db2.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
+    Db2.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
+    Db2.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
+    Db2.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
+    Db2.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
     function validateDatabaseName(databaseName) {
       if (typeof databaseName !== "string")
         throw new error_1.MongoInvalidArgumentError("Database name must be a string");
@@ -26592,6 +26597,14 @@ var PlaceRepository = class {
     const total = await this.places.countDocuments();
     return Math.ceil(total / ITEM_PER_PAGE);
   }
+  async save(place) {
+    const result = await this.places.insertOne(place);
+    return result.insertedId;
+  }
+  async update(placeId, place) {
+    const query = { _id: placeId };
+    return await this.places.updateOne(query, { $set: place });
+  }
 };
 var PlaceRepository_default = PlaceRepository;
 
@@ -26619,11 +26632,62 @@ var getPlaces = async (db, queryStringParameters) => {
 };
 var get_places_default = getPlaces;
 
+// server/functions/place/save-place.ts
+var savePlace = async (db, body) => {
+  const placeRepository = new PlaceRepository_default(db);
+  const newPlace = {
+    name: body.name,
+    percentage: {
+      tax: body.taxPercentage,
+      service: body.servicePercentage
+    },
+    taxPriority: body.taxPriority
+  };
+  await placeRepository.save(newPlace);
+  const response = {
+    data: true
+  };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response)
+  };
+};
+var save_place_default = savePlace;
+
+// server/functions/place/update-place.ts
+var import_mongodb = __toESM(require_lib3());
+var updatePlace = async (db, queryStringParameters, body) => {
+  const { placeId: placeIdString } = queryStringParameters;
+  const placeId = new import_mongodb.ObjectId(placeIdString);
+  const placeRepository = new PlaceRepository_default(db);
+  const place = {
+    name: body.name,
+    percentage: {
+      tax: body.taxPercentage,
+      service: body.servicePercentage
+    },
+    taxPriority: body.taxPriority
+  };
+  await placeRepository.update(placeId, place);
+  const response = {
+    data: true
+  };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response)
+  };
+};
+var update_place_default = updatePlace;
+
 // server/functions/place/index.ts
-var handler = async function({ httpMethod, queryStringParameters }) {
+var handler = async function({ httpMethod, queryStringParameters, body }) {
   const db = await connectToDatabase();
   if (httpMethod === "GET") {
     return get_places_default(db, queryStringParameters);
+  } else if (httpMethod === "POST") {
+    return save_place_default(db, JSON.parse(body));
+  } else if (httpMethod === "PUT") {
+    return update_place_default(db, queryStringParameters, JSON.parse(body));
   }
 };
 module.exports = __toCommonJS(place_exports);

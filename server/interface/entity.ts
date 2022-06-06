@@ -16,8 +16,8 @@ export interface Place {
 }
 
 export interface Menu {
-  _id: ObjectId | string,
+  _id?: ObjectId | string,
   name: string,
   price: Long,
-  placeId: ObjectId
+  placeId: ObjectId | string
 }

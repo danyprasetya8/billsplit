@@ -2552,10 +2552,10 @@ var require_objectid = __commonJS({
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
     var PROCESS_UNIQUE = null;
     var kId = Symbol("id");
-    var ObjectId2 = function() {
-      function ObjectId3(inputId) {
-        if (!(this instanceof ObjectId3))
-          return new ObjectId3(inputId);
+    var ObjectId5 = function() {
+      function ObjectId6(inputId) {
+        if (!(this instanceof ObjectId6))
+          return new ObjectId6(inputId);
         var workingId;
         if (typeof inputId === "object" && inputId && "id" in inputId) {
           if (typeof inputId.id !== "string" && !ArrayBuffer.isView(inputId.id)) {
@@ -2570,7 +2570,7 @@ var require_objectid = __commonJS({
           workingId = inputId;
         }
         if (workingId == null || typeof workingId === "number") {
-          this[kId] = ObjectId3.generate(typeof workingId === "number" ? workingId : void 0);
+          this[kId] = ObjectId6.generate(typeof workingId === "number" ? workingId : void 0);
         } else if (ArrayBuffer.isView(workingId) && workingId.byteLength === 12) {
           this[kId] = workingId instanceof buffer_1.Buffer ? workingId : ensure_buffer_1.ensureBuffer(workingId);
         } else if (typeof workingId === "string") {
@@ -2589,24 +2589,24 @@ var require_objectid = __commonJS({
         } else {
           throw new error_1.BSONTypeError("Argument passed in does not match the accepted types");
         }
-        if (ObjectId3.cacheHexString) {
+        if (ObjectId6.cacheHexString) {
           this.__id = this.id.toString("hex");
         }
       }
-      Object.defineProperty(ObjectId3.prototype, "id", {
+      Object.defineProperty(ObjectId6.prototype, "id", {
         get: function() {
           return this[kId];
         },
         set: function(value) {
           this[kId] = value;
-          if (ObjectId3.cacheHexString) {
+          if (ObjectId6.cacheHexString) {
             this.__id = value.toString("hex");
           }
         },
         enumerable: false,
         configurable: true
       });
-      Object.defineProperty(ObjectId3.prototype, "generationTime", {
+      Object.defineProperty(ObjectId6.prototype, "generationTime", {
         get: function() {
           return this.id.readInt32BE(0);
         },
@@ -2616,24 +2616,24 @@ var require_objectid = __commonJS({
         enumerable: false,
         configurable: true
       });
-      ObjectId3.prototype.toHexString = function() {
-        if (ObjectId3.cacheHexString && this.__id) {
+      ObjectId6.prototype.toHexString = function() {
+        if (ObjectId6.cacheHexString && this.__id) {
           return this.__id;
         }
         var hexString = this.id.toString("hex");
-        if (ObjectId3.cacheHexString && !this.__id) {
+        if (ObjectId6.cacheHexString && !this.__id) {
           this.__id = hexString;
         }
         return hexString;
       };
-      ObjectId3.getInc = function() {
-        return ObjectId3.index = (ObjectId3.index + 1) % 16777215;
+      ObjectId6.getInc = function() {
+        return ObjectId6.index = (ObjectId6.index + 1) % 16777215;
       };
-      ObjectId3.generate = function(time) {
+      ObjectId6.generate = function(time) {
         if (typeof time !== "number") {
           time = Math.floor(Date.now() / 1e3);
         }
-        var inc = ObjectId3.getInc();
+        var inc = ObjectId6.getInc();
         var buffer = buffer_1.Buffer.alloc(12);
         buffer.writeUInt32BE(time, 0);
         if (PROCESS_UNIQUE === null) {
@@ -2649,28 +2649,28 @@ var require_objectid = __commonJS({
         buffer[9] = inc >> 16 & 255;
         return buffer;
       };
-      ObjectId3.prototype.toString = function(format) {
+      ObjectId6.prototype.toString = function(format) {
         if (format)
           return this.id.toString(format);
         return this.toHexString();
       };
-      ObjectId3.prototype.toJSON = function() {
+      ObjectId6.prototype.toJSON = function() {
         return this.toHexString();
       };
-      ObjectId3.prototype.equals = function(otherId) {
+      ObjectId6.prototype.equals = function(otherId) {
         if (otherId === void 0 || otherId === null) {
           return false;
         }
-        if (otherId instanceof ObjectId3) {
+        if (otherId instanceof ObjectId6) {
           return this[kId][11] === otherId[kId][11] && this[kId].equals(otherId[kId]);
         }
-        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
+        if (typeof otherId === "string" && ObjectId6.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
           return otherId === buffer_1.Buffer.prototype.toString.call(this.id, "latin1");
         }
-        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 24) {
+        if (typeof otherId === "string" && ObjectId6.isValid(otherId) && otherId.length === 24) {
           return otherId.toLowerCase() === this.toHexString();
         }
-        if (typeof otherId === "string" && ObjectId3.isValid(otherId) && otherId.length === 12) {
+        if (typeof otherId === "string" && ObjectId6.isValid(otherId) && otherId.length === 12) {
           return buffer_1.Buffer.from(otherId).equals(this.id);
         }
         if (typeof otherId === "object" && "toHexString" in otherId && typeof otherId.toHexString === "function") {
@@ -2680,75 +2680,75 @@ var require_objectid = __commonJS({
         }
         return false;
       };
-      ObjectId3.prototype.getTimestamp = function() {
+      ObjectId6.prototype.getTimestamp = function() {
         var timestamp = new Date();
         var time = this.id.readUInt32BE(0);
         timestamp.setTime(Math.floor(time) * 1e3);
         return timestamp;
       };
-      ObjectId3.createPk = function() {
-        return new ObjectId3();
+      ObjectId6.createPk = function() {
+        return new ObjectId6();
       };
-      ObjectId3.createFromTime = function(time) {
+      ObjectId6.createFromTime = function(time) {
         var buffer = buffer_1.Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         buffer.writeUInt32BE(time, 0);
-        return new ObjectId3(buffer);
+        return new ObjectId6(buffer);
       };
-      ObjectId3.createFromHexString = function(hexString) {
+      ObjectId6.createFromHexString = function(hexString) {
         if (typeof hexString === "undefined" || hexString != null && hexString.length !== 24) {
           throw new error_1.BSONTypeError("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         }
-        return new ObjectId3(buffer_1.Buffer.from(hexString, "hex"));
+        return new ObjectId6(buffer_1.Buffer.from(hexString, "hex"));
       };
-      ObjectId3.isValid = function(id) {
+      ObjectId6.isValid = function(id) {
         if (id == null)
           return false;
         try {
-          new ObjectId3(id);
+          new ObjectId6(id);
           return true;
         } catch (_a) {
           return false;
         }
       };
-      ObjectId3.prototype.toExtendedJSON = function() {
+      ObjectId6.prototype.toExtendedJSON = function() {
         if (this.toHexString)
           return { $oid: this.toHexString() };
         return { $oid: this.toString("hex") };
       };
-      ObjectId3.fromExtendedJSON = function(doc) {
-        return new ObjectId3(doc.$oid);
+      ObjectId6.fromExtendedJSON = function(doc) {
+        return new ObjectId6(doc.$oid);
       };
-      ObjectId3.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      ObjectId6.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      ObjectId3.prototype.inspect = function() {
+      ObjectId6.prototype.inspect = function() {
         return 'new ObjectId("' + this.toHexString() + '")';
       };
-      ObjectId3.index = Math.floor(Math.random() * 16777215);
-      return ObjectId3;
+      ObjectId6.index = Math.floor(Math.random() * 16777215);
+      return ObjectId6;
     }();
-    exports.ObjectId = ObjectId2;
-    Object.defineProperty(ObjectId2.prototype, "generate", {
+    exports.ObjectId = ObjectId5;
+    Object.defineProperty(ObjectId5.prototype, "generate", {
       value: utils_1.deprecate(function(time) {
-        return ObjectId2.generate(time);
+        return ObjectId5.generate(time);
       }, "Please use the static `ObjectId.generate(time)` instead")
     });
-    Object.defineProperty(ObjectId2.prototype, "getInc", {
+    Object.defineProperty(ObjectId5.prototype, "getInc", {
       value: utils_1.deprecate(function() {
-        return ObjectId2.getInc();
+        return ObjectId5.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId2.prototype, "get_inc", {
+    Object.defineProperty(ObjectId5.prototype, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId2.getInc();
+        return ObjectId5.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId2, "get_inc", {
+    Object.defineProperty(ObjectId5, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId2.getInc();
+        return ObjectId5.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId2.prototype, "_bsontype", { value: "ObjectID" });
+    Object.defineProperty(ObjectId5.prototype, "_bsontype", { value: "ObjectID" });
   }
 });
 
@@ -11994,7 +11994,7 @@ var require_db = __commonJS({
       "compression",
       "retryWrites"
     ];
-    var Db = class {
+    var Db5 = class {
       constructor(client, databaseName, options) {
         var _a;
         options = options !== null && options !== void 0 ? options : {};
@@ -12162,13 +12162,13 @@ var require_db = __commonJS({
         return this.s.logger;
       }
     };
-    exports.Db = Db;
-    Db.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
-    Db.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
-    Db.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
-    Db.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
-    Db.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
-    Db.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
+    exports.Db = Db5;
+    Db5.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
+    Db5.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
+    Db5.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
+    Db5.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
+    Db5.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
+    Db5.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
     function validateDatabaseName(databaseName) {
       if (typeof databaseName !== "string")
         throw new error_1.MongoInvalidArgumentError("Database name must be a string");
@@ -26553,9 +26553,9 @@ var require_lib3 = __commonJS({
   }
 });
 
-// server/functions/place-detail/index.ts
-var place_detail_exports = {};
-__export(place_detail_exports, {
+// server/functions/menu/index.ts
+var menu_exports = {};
+__export(menu_exports, {
   handler: () => handler
 });
 
@@ -26573,75 +26573,142 @@ var connectToDatabase = async () => {
   return cachedDb;
 };
 
-// server/functions/place-detail/get-place-detail.ts
-var mongodb = __toESM(require_lib3());
-
-// server/constant/index.ts
-var ITEM_PER_PAGE = 10;
+// server/functions/menu/delete-menu.ts
+var import_mongodb = __toESM(require_lib3());
 
 // server/constant/collection.ts
-var PLACES = "places";
+var MENUS = "menus";
 
-// server/repository/PlaceRepository.ts
-var PlaceRepository = class {
+// server/repository/MenuRepository.ts
+var MenuRepository = class {
   constructor(db) {
-    this.places = db.collection(PLACES);
+    this.menus = db.collection(MENUS);
   }
-  async findById(id) {
+  async findById(menuId) {
     const query = {
-      _id: id
+      _id: menuId
     };
-    return await this.places.findOne(query);
+    return await this.menus.findOne(query);
   }
-  async findPaginated(page) {
-    return await this.places.find().skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  async findAll(placeId) {
+    const query = {
+      placeId
+    };
+    return await this.menus.find(query).toArray();
   }
-  async getTotalPage() {
-    const total = await this.places.countDocuments();
-    return Math.ceil(total / ITEM_PER_PAGE);
-  }
-  async save(place) {
-    const result = await this.places.insertOne(place);
+  async save(menu) {
+    const result = await this.menus.insertOne(menu);
     return result.insertedId;
   }
-  async update(placeId, place) {
-    const query = { _id: placeId };
-    return await this.places.updateOne(query, { $set: place });
+  async update(menuId, menu) {
+    const query = {
+      _id: menuId
+    };
+    return await this.menus.updateOne(query, { $set: menu });
+  }
+  async delete(menuId) {
+    const query = {
+      _id: menuId
+    };
+    return await this.menus.deleteOne(query);
   }
 };
-var PlaceRepository_default = PlaceRepository;
+var MenuRepository_default = MenuRepository;
 
-// server/functions/place-detail/get-place-detail.ts
-var getPlaceDetail = async (db, queryStringParameters) => {
-  const { placeId } = queryStringParameters;
-  const placeRepository = new PlaceRepository_default(db);
-  const placeIdObject = new mongodb.ObjectId(placeId);
-  const { name, percentage, taxPriority } = await placeRepository.findById(placeIdObject);
-  const placeResponse = {
-    data: {
-      name,
-      percentage: {
-        tax: +percentage.tax,
-        service: +percentage.service
-      },
-      taxPriority
-    }
+// server/functions/menu/delete-menu.ts
+var deleteMenu = async (db, queryStringParameters) => {
+  const { menuId: menuIdString } = queryStringParameters;
+  const menuId = new import_mongodb.ObjectId(menuIdString);
+  const menuRepository = new MenuRepository_default(db);
+  const result = await menuRepository.delete(menuId);
+  const response = {
+    data: result.acknowledged
   };
   return {
     statusCode: 200,
-    body: JSON.stringify(placeResponse)
+    body: JSON.stringify(response)
   };
 };
-var get_place_detail_default = getPlaceDetail;
+var delete_menu_default = deleteMenu;
 
-// server/functions/place-detail/index.ts
-var handler = async ({ httpMethod, queryStringParameters }) => {
+// server/functions/menu/get-menus.ts
+var import_mongodb2 = __toESM(require_lib3());
+var getMenus = async (db, queryStringParameters) => {
+  const { placeId: placeIdString } = queryStringParameters;
+  const placeId = new import_mongodb2.ObjectId(placeIdString);
+  const menuRepository = new MenuRepository_default(db);
+  const menus = await menuRepository.findAll(placeId);
+  const menuResponse = {
+    data: menus.map((menu) => ({
+      id: menu._id.toString(),
+      name: menu.name,
+      price: +menu.price
+    }))
+  };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(menuResponse)
+  };
+};
+var get_menus_default = getMenus;
+
+// server/functions/menu/save-menu.ts
+var import_mongodb3 = __toESM(require_lib3());
+var saveMenu = async (db, queryStringParameters, body) => {
+  const { placeId: placeIdString } = queryStringParameters;
+  const placeId = new import_mongodb3.ObjectId(placeIdString);
+  const menuRepository = new MenuRepository_default(db);
+  const newMenu = {
+    name: body.name,
+    price: body.price,
+    placeId
+  };
+  await menuRepository.save(newMenu);
+  const response = {
+    data: true
+  };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response)
+  };
+};
+var save_menu_default = saveMenu;
+
+// server/functions/menu/update-menu.ts
+var import_mongodb4 = __toESM(require_lib3());
+var updateMenu = async (db, queryStringParameters, body) => {
+  const { menuId: menuIdString } = queryStringParameters;
+  const menuId = new import_mongodb4.ObjectId(menuIdString);
+  const menuRepository = new MenuRepository_default(db);
+  const menu = {
+    name: body.name,
+    price: body.price
+  };
+  await menuRepository.update(menuId, menu);
+  const response = {
+    data: true
+  };
+  return {
+    statusCode: 200,
+    body: JSON.stringify(response)
+  };
+};
+var update_menu_default = updateMenu;
+
+// server/functions/menu/index.ts
+var handler = async function({ httpMethod, queryStringParameters, body }) {
   const db = await connectToDatabase();
   if (httpMethod === "GET") {
-    return get_place_detail_default(db, queryStringParameters);
+    return get_menus_default(db, queryStringParameters);
+  } else if (httpMethod === "POST") {
+    return save_menu_default(db, queryStringParameters, JSON.parse(body));
+  } else if (httpMethod === "PUT") {
+    return update_menu_default(db, queryStringParameters, JSON.parse(body));
+  } else if (httpMethod === "DELETE") {
+    return delete_menu_default(db, queryStringParameters);
   }
 };
-module.exports = __toCommonJS(place_detail_exports);
+module.exports = __toCommonJS(menu_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
