@@ -9,10 +9,9 @@ const handler: Handler = async function({ httpMethod, queryStringParameters, bod
   if (httpMethod === 'GET') {
     return getPlaces(db, queryStringParameters)
   } else if (httpMethod === 'POST') {
-    return savePlace(db, JSON.parse(body))
-  } else if (httpMethod === 'PUT') {
-    return updatePlace(db, queryStringParameters, JSON.parse(body))
+    return savePlace(db, body)
   }
+  return updatePlace(db, queryStringParameters, body)
 }
 
 export { handler }

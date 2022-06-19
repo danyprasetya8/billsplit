@@ -3,7 +3,8 @@ import { Menu } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import MenuRepository from '../../repository/MenuRepository'
 
-const updateMenu = async (db: Db, queryStringParameters, body) => {
+const updateMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '')
 
   const { menuId: menuIdString } = queryStringParameters
   const menuId = new ObjectId(menuIdString)

@@ -9,10 +9,9 @@ const handler: Handler = async function({ httpMethod, queryStringParameters, bod
   if (httpMethod === 'GET') {
     return getBills(db, queryStringParameters)
   } else if (httpMethod === 'POST') {
-    return saveBill(db, JSON.parse(body))
-  } else if (httpMethod === 'PUT') {
-    return updateBill(db, queryStringParameters, JSON.parse(body))
+    return saveBill(db, body)
   }
+  return updateBill(db, queryStringParameters, body)
 }
 
 export { handler }

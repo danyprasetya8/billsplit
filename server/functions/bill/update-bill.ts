@@ -4,7 +4,8 @@ import { normalizeDate } from '../../helper/date'
 import BillDetailRepository from '../../repository/BillDetailRepository'
 import BillRepository from '../../repository/BillRepository'
 
-const updateBill = async (db: Db, queryStringParameters, body) => {
+const updateBill = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '')
 
   const { billId: billIdString } = queryStringParameters
   const billId = new ObjectId(billIdString)

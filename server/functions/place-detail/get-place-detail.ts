@@ -18,16 +18,23 @@ const getPlaceDetail = async (db: mongodb.Db, queryStringParameters) => {
   const placeRepository = new PlaceRepository(db)
 
   const placeIdObject = new mongodb.ObjectId(placeId)
-  const { name, percentage, taxPriority } = await placeRepository.findById(placeIdObject)
+  const place = await placeRepository.findById(placeIdObject)
+
+  if (place === null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ errors: 'Place not found' })
+    }
+  }
 
   const placeResponse: BaseResponse<GetPlaceDetailResponse> = {
     data: {
-      name,
+      name: place.name,
       percentage: {
-        tax: +percentage.tax,
-        service: +percentage.service
+        tax: +place.percentage.tax,
+        service: +place.percentage.service
       },
-      taxPriority
+      taxPriority: place.taxPriority
     }
   }
 

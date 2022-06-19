@@ -22,7 +22,8 @@ interface RequestBody {
   persons: PersonRequestBody[]
 }
 
-const saveBill = async (db: Db, body) => {
+const saveBill = async (db: Db, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '')
 
   const billRepository = new BillRepository(db)
   const billDetailRepository = new BillDetailRepository(db)

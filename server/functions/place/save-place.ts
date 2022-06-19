@@ -3,7 +3,8 @@ import { Place } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
 
-const savePlace = async (db: Db, body) => {
+const savePlace = async (db: Db, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '')
 
   const placeRepository = new PlaceRepository(db)
 

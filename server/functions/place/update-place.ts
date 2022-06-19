@@ -3,7 +3,8 @@ import { Place } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
 
-const updatePlace = async (db: Db, queryStringParameters, body) => {
+const updatePlace = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '')
 
   const { placeId: placeIdString }: { placeId: string } = queryStringParameters
   const placeId: ObjectId = new ObjectId(placeIdString)
