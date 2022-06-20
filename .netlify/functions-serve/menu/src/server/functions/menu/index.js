@@ -26654,7 +26654,8 @@ var get_menus_default = getMenus;
 
 // server/functions/menu/save-menu.ts
 var import_mongodb3 = __toESM(require_lib3());
-var saveMenu = async (db, queryStringParameters, body) => {
+var saveMenu = async (db, queryStringParameters, bodyString) => {
+  const body = JSON.parse(bodyString || "");
   const { placeId: placeIdString } = queryStringParameters;
   const placeId = new import_mongodb3.ObjectId(placeIdString);
   const menuRepository = new MenuRepository_default(db);
@@ -26676,7 +26677,8 @@ var save_menu_default = saveMenu;
 
 // server/functions/menu/update-menu.ts
 var import_mongodb4 = __toESM(require_lib3());
-var updateMenu = async (db, queryStringParameters, body) => {
+var updateMenu = async (db, queryStringParameters, bodyString) => {
+  const body = JSON.parse(bodyString || "");
   const { menuId: menuIdString } = queryStringParameters;
   const menuId = new import_mongodb4.ObjectId(menuIdString);
   const menuRepository = new MenuRepository_default(db);
@@ -26701,12 +26703,11 @@ var handler = async function({ httpMethod, queryStringParameters, body }) {
   if (httpMethod === "GET") {
     return get_menus_default(db, queryStringParameters);
   } else if (httpMethod === "POST") {
-    return save_menu_default(db, queryStringParameters, JSON.parse(body));
+    return save_menu_default(db, queryStringParameters, body);
   } else if (httpMethod === "PUT") {
-    return update_menu_default(db, queryStringParameters, JSON.parse(body));
-  } else if (httpMethod === "DELETE") {
-    return delete_menu_default(db, queryStringParameters);
+    return update_menu_default(db, queryStringParameters, body);
   }
+  return delete_menu_default(db, queryStringParameters);
 };
 module.exports = __toCommonJS(menu_exports);
 // Annotate the CommonJS export names for ESM import in node:

@@ -2,7 +2,9 @@ import mongodb from 'mongodb'
 
 const { MongoClient } = require('mongodb')
 
-let cachedDb: mongodb.Db = null
+type CachedDb = mongodb.Db | null
+
+let cachedDb: CachedDb = null
 
 const connectToDatabase: () => Promise<mongodb.Db> = async () => {
   if (cachedDb) return cachedDb

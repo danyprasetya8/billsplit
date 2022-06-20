@@ -26633,7 +26633,8 @@ var getPlaces = async (db, queryStringParameters) => {
 var get_places_default = getPlaces;
 
 // server/functions/place/save-place.ts
-var savePlace = async (db, body) => {
+var savePlace = async (db, bodyString) => {
+  const body = JSON.parse(bodyString || "");
   const placeRepository = new PlaceRepository_default(db);
   const newPlace = {
     name: body.name,
@@ -26656,7 +26657,8 @@ var save_place_default = savePlace;
 
 // server/functions/place/update-place.ts
 var import_mongodb = __toESM(require_lib3());
-var updatePlace = async (db, queryStringParameters, body) => {
+var updatePlace = async (db, queryStringParameters, bodyString) => {
+  const body = JSON.parse(bodyString || "");
   const { placeId: placeIdString } = queryStringParameters;
   const placeId = new import_mongodb.ObjectId(placeIdString);
   const placeRepository = new PlaceRepository_default(db);
@@ -26685,10 +26687,9 @@ var handler = async function({ httpMethod, queryStringParameters, body }) {
   if (httpMethod === "GET") {
     return get_places_default(db, queryStringParameters);
   } else if (httpMethod === "POST") {
-    return save_place_default(db, JSON.parse(body));
-  } else if (httpMethod === "PUT") {
-    return update_place_default(db, queryStringParameters, JSON.parse(body));
+    return save_place_default(db, body);
   }
+  return update_place_default(db, queryStringParameters, body);
 };
 module.exports = __toCommonJS(place_exports);
 // Annotate the CommonJS export names for ESM import in node:

@@ -1,6 +1,7 @@
 import { Collection, Db, DeleteResult, Filter, ObjectId } from 'mongodb'
 import { BILL_DETAILS } from '../constant/collection'
 import { BillDetail } from '../interface/entity'
+import { BillDetailGroupedByPerson } from '../interface/projection'
 
 class BillDetailRepository {
 
@@ -19,6 +20,17 @@ class BillDetailRepository {
     const query: Filter<BillDetail> = { billId }
     return await this.billDetails.find(query)
       .toArray()
+  }
+
+  public async groupByPerson(billId: ObjectId): Promise<BillDetailGroupedByPerson[]> {
+    return await this.billDetails.aggregate<BillDetailGroupedByPerson>([
+      {
+        $group: {
+          _id: "$person",
+          menus: { $addToSet: "$menu" }
+        }
+      }
+    ]).toArray()
   }
 
   public async save(billDetail: BillDetail): Promise<string | ObjectId> {

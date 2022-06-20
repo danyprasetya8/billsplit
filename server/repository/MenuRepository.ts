@@ -10,7 +10,7 @@ class MenuRepository {
     this.menus = db.collection<Menu>(MENUS)
   }
 
-  public async findById(menuId: ObjectId): Promise<Menu> {
+  public async findById(menuId: ObjectId): Promise<Menu | null> {
     const query: Filter<Menu> = {
       _id: menuId
     }

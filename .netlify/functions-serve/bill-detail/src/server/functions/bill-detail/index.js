@@ -26553,11 +26553,12 @@ var require_lib3 = __commonJS({
   }
 });
 
-// server/functions/place-detail/index.ts
-var place_detail_exports = {};
-__export(place_detail_exports, {
+// server/functions/bill-detail/index.ts
+var bill_detail_exports = {};
+__export(bill_detail_exports, {
   handler: () => handler
 });
+var import_mongodb = __toESM(require_lib3());
 
 // server/database/mongo.ts
 var { MongoClient } = require_lib3();
@@ -26573,79 +26574,104 @@ var connectToDatabase = async () => {
   return cachedDb;
 };
 
-// server/functions/place-detail/get-place-detail.ts
-var mongodb = __toESM(require_lib3());
+// server/constant/collection.ts
+var BILLS = "bills";
+var BILL_DETAILS = "billDetails";
+
+// server/repository/BillDetailRepository.ts
+var BillDetailRepository = class {
+  constructor(db) {
+    this.billDetails = db.collection(BILL_DETAILS);
+  }
+  async deleteByBillId(billId) {
+    const query = { billId };
+    return await this.billDetails.deleteMany(query);
+  }
+  async findAll(billId) {
+    const query = { billId };
+    return await this.billDetails.find(query).toArray();
+  }
+  async groupByPerson(billId) {
+    return await this.billDetails.aggregate([
+      {
+        $group: {
+          _id: "$person",
+          menus: { $addToSet: "$menu" }
+        }
+      }
+    ]).toArray();
+  }
+  async save(billDetail) {
+    const result = await this.billDetails.insertOne(billDetail);
+    return result.insertedId;
+  }
+  async saveAll(billDetails) {
+    const result = await this.billDetails.insertMany(billDetails);
+    return result.insertedIds;
+  }
+};
+var BillDetailRepository_default = BillDetailRepository;
 
 // server/constant/index.ts
 var ITEM_PER_PAGE = 10;
 
-// server/constant/collection.ts
-var PLACES = "places";
-
-// server/repository/PlaceRepository.ts
-var PlaceRepository = class {
+// server/repository/BillRepository.ts
+var BillRepository = class {
   constructor(db) {
-    this.places = db.collection(PLACES);
+    this.bills = db.collection(BILLS);
   }
-  async findById(id) {
-    const query = {
-      _id: id
-    };
-    return await this.places.findOne(query);
+  async findById(billId) {
+    const query = { _id: billId };
+    return await this.bills.findOne(query);
   }
   async findPaginated(page) {
-    return await this.places.find().skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+    return await this.bills.find().sort({ date: -1 }).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
   }
   async getTotalPage() {
-    const total = await this.places.countDocuments();
+    const total = await this.bills.countDocuments();
     return Math.ceil(total / ITEM_PER_PAGE);
   }
-  async save(place) {
-    const result = await this.places.insertOne(place);
+  async save(bill) {
+    const result = await this.bills.insertOne(bill);
     return result.insertedId;
   }
-  async update(placeId, place) {
-    const query = { _id: placeId };
-    return await this.places.updateOne(query, { $set: place });
+  async update(billId, bill) {
+    const query = { _id: billId };
+    return await this.bills.updateOne(query, { $set: bill });
   }
 };
-var PlaceRepository_default = PlaceRepository;
+var BillRepository_default = BillRepository;
 
-// server/functions/place-detail/get-place-detail.ts
-var getPlaceDetail = async (db, queryStringParameters) => {
-  const { placeId } = queryStringParameters;
-  const placeRepository = new PlaceRepository_default(db);
-  const placeIdObject = new mongodb.ObjectId(placeId);
-  const place = await placeRepository.findById(placeIdObject);
-  if (place === null) {
+// server/functions/bill-detail/index.ts
+var handler = async function({ queryStringParameters }) {
+  const db = await connectToDatabase();
+  const { billId: billIdString } = queryStringParameters;
+  const billRepository = new BillRepository_default(db);
+  const billDetailRepository = new BillDetailRepository_default(db);
+  const billId = new import_mongodb.ObjectId(billIdString);
+  const bill = await billRepository.findById(billId);
+  const persons = await billDetailRepository.groupByPerson(billId);
+  if (bill === null || !persons.length) {
     return {
       statusCode: 400,
-      body: JSON.stringify({ errors: "Place not found" })
+      body: JSON.stringify({ errors: "Bill not found" })
     };
   }
-  const placeResponse = {
+  const response = {
     data: {
-      name: place.name,
-      percentage: {
-        tax: +place.percentage.tax,
-        service: +place.percentage.service
-      },
-      taxPriority: place.taxPriority
+      placeId: bill.placeId.toString(),
+      persons: persons.map((person) => ({
+        name: person._id,
+        menus: person.menus
+      }))
     }
   };
   return {
     statusCode: 200,
-    body: JSON.stringify(placeResponse)
+    body: JSON.stringify(response)
   };
 };
-var get_place_detail_default = getPlaceDetail;
-
-// server/functions/place-detail/index.ts
-var handler = async ({ httpMethod, queryStringParameters }) => {
-  const db = await connectToDatabase();
-  return get_place_detail_default(db, queryStringParameters);
-};
-module.exports = __toCommonJS(place_detail_exports);
+module.exports = __toCommonJS(bill_detail_exports);
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
   handler
