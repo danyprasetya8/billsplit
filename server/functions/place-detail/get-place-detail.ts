@@ -12,8 +12,12 @@ interface GetPlaceDetailResponse {
   taxPriority: TaxPriority
 }
 
+interface QueryParameters {
+  placeId: string
+}
+
 const getPlaceDetail = async (db: mongodb.Db, queryStringParameters) => { 
-  const { placeId } = queryStringParameters
+  const { placeId } = queryStringParameters as QueryParameters
 
   const placeRepository = new PlaceRepository(db)
 

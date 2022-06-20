@@ -26641,7 +26641,7 @@ var getPlaceDetail = async (db, queryStringParameters) => {
 var get_place_detail_default = getPlaceDetail;
 
 // server/functions/place-detail/index.ts
-var handler = async ({ httpMethod, queryStringParameters }) => {
+var handler = async ({ queryStringParameters }) => {
   const db = await connectToDatabase();
   return get_place_detail_default(db, queryStringParameters);
 };

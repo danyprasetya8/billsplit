@@ -1,18 +1,27 @@
-import { Db, ObjectId } from 'mongodb'
+import { Db, Long, ObjectId } from 'mongodb'
 import { Menu } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import MenuRepository from '../../repository/MenuRepository'
 
-const updateMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
-  const body = JSON.parse(bodyString || '')
+interface RequestBody {
+  name: string,
+  price: number
+}
 
-  const { menuId: menuIdString } = queryStringParameters
+interface QueryParameters {
+  menuId: string
+}
+
+const updateMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body: RequestBody = JSON.parse(bodyString || '')
+
+  const { menuId: menuIdString } = queryStringParameters as QueryParameters
   const menuId = new ObjectId(menuIdString)
 
   const menuRepository = new MenuRepository(db)
   const menu: Partial<Menu> = {
     name: body.name,
-    price: body.price
+    price: Long.fromNumber(body.price)
   }
   await menuRepository.update(menuId, menu)
 

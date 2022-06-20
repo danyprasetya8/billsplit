@@ -1,19 +1,28 @@
-import { Db, ObjectId } from 'mongodb'
+import { Db, Long, ObjectId } from 'mongodb'
 import { Menu } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import MenuRepository from '../../repository/MenuRepository'
 
-const saveMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
-  const body = JSON.parse(bodyString || '')
+interface RequestBody {
+  name: string,
+  price: number
+}
 
-  const { placeId: placeIdString } = queryStringParameters
+interface QueryParameters {
+  placeId: string
+}
+
+const saveMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body: RequestBody = JSON.parse(bodyString || '')
+
+  const { placeId: placeIdString } = queryStringParameters as QueryParameters
   const placeId = new ObjectId(placeIdString)
 
   const menuRepository = new MenuRepository(db)
 
   const newMenu: Menu = {
     name: body.name,
-    price: body.price,
+    price: Long.fromNumber(body.price),
     placeId
   }
   await menuRepository.save(newMenu)

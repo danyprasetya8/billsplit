@@ -2380,25 +2380,25 @@ var require_double = __commonJS({
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     exports.Double = void 0;
-    var Double = function() {
-      function Double2(value) {
-        if (!(this instanceof Double2))
-          return new Double2(value);
+    var Double3 = function() {
+      function Double4(value) {
+        if (!(this instanceof Double4))
+          return new Double4(value);
         if (value instanceof Number) {
           value = value.valueOf();
         }
         this.value = +value;
       }
-      Double2.prototype.valueOf = function() {
+      Double4.prototype.valueOf = function() {
         return this.value;
       };
-      Double2.prototype.toJSON = function() {
+      Double4.prototype.toJSON = function() {
         return this.value;
       };
-      Double2.prototype.toString = function(radix) {
+      Double4.prototype.toString = function(radix) {
         return this.value.toString(radix);
       };
-      Double2.prototype.toExtendedJSON = function(options) {
+      Double4.prototype.toExtendedJSON = function(options) {
         if (options && (options.legacy || options.relaxed && isFinite(this.value))) {
           return this.value;
         }
@@ -2416,21 +2416,21 @@ var require_double = __commonJS({
         }
         return { $numberDouble };
       };
-      Double2.fromExtendedJSON = function(doc, options) {
+      Double4.fromExtendedJSON = function(doc, options) {
         var doubleValue = parseFloat(doc.$numberDouble);
-        return options && options.relaxed ? doubleValue : new Double2(doubleValue);
+        return options && options.relaxed ? doubleValue : new Double4(doubleValue);
       };
-      Double2.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      Double4.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      Double2.prototype.inspect = function() {
+      Double4.prototype.inspect = function() {
         var eJSON = this.toExtendedJSON();
         return "new Double(" + eJSON.$numberDouble + ")";
       };
-      return Double2;
+      return Double4;
     }();
-    exports.Double = Double;
-    Object.defineProperty(Double.prototype, "_bsontype", { value: "Double" });
+    exports.Double = Double3;
+    Object.defineProperty(Double3.prototype, "_bsontype", { value: "Double" });
   }
 });
 
@@ -11994,7 +11994,7 @@ var require_db = __commonJS({
       "compression",
       "retryWrites"
     ];
-    var Db2 = class {
+    var Db3 = class {
       constructor(client, databaseName, options) {
         var _a;
         options = options !== null && options !== void 0 ? options : {};
@@ -12162,13 +12162,13 @@ var require_db = __commonJS({
         return this.s.logger;
       }
     };
-    exports.Db = Db2;
-    Db2.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
-    Db2.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
-    Db2.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
-    Db2.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
-    Db2.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
-    Db2.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
+    exports.Db = Db3;
+    Db3.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
+    Db3.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
+    Db3.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
+    Db3.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
+    Db3.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
+    Db3.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
     function validateDatabaseName(databaseName) {
       if (typeof databaseName !== "string")
         throw new error_1.MongoInvalidArgumentError("Database name must be a string");
@@ -26615,10 +26615,13 @@ var getPlaces = async (db, queryStringParameters) => {
   const places = await placeRepository.findPaginated(page);
   const totalPage = await placeRepository.getTotalPage();
   const placesResponse = {
-    data: places.map((place) => ({
-      id: place._id.toString(),
-      name: place.name
-    })),
+    data: places.map((place) => {
+      const id = place._id || "";
+      return {
+        id: id.toString(),
+        name: place.name
+      };
+    }),
     paging: {
       page: +page,
       itemPerPage: ITEM_PER_PAGE,
@@ -26633,16 +26636,26 @@ var getPlaces = async (db, queryStringParameters) => {
 var get_places_default = getPlaces;
 
 // server/functions/place/save-place.ts
+var import_mongodb = __toESM(require_lib3());
+
+// server/interface/entity.ts
+var TaxPriority = /* @__PURE__ */ ((TaxPriority2) => {
+  TaxPriority2[TaxPriority2["TAX"] = 0] = "TAX";
+  TaxPriority2[TaxPriority2["SERVICE"] = 1] = "SERVICE";
+  return TaxPriority2;
+})(TaxPriority || {});
+
+// server/functions/place/save-place.ts
 var savePlace = async (db, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const placeRepository = new PlaceRepository_default(db);
   const newPlace = {
     name: body.name,
     percentage: {
-      tax: body.taxPercentage,
-      service: body.servicePercentage
+      tax: new import_mongodb.Double(body.taxPercentage),
+      service: new import_mongodb.Double(body.servicePercentage)
     },
-    taxPriority: body.taxPriority
+    taxPriority: TaxPriority[body.taxPriority]
   };
   await placeRepository.save(newPlace);
   const response = {
@@ -26656,19 +26669,19 @@ var savePlace = async (db, bodyString) => {
 var save_place_default = savePlace;
 
 // server/functions/place/update-place.ts
-var import_mongodb = __toESM(require_lib3());
+var import_mongodb2 = __toESM(require_lib3());
 var updatePlace = async (db, queryStringParameters, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const { placeId: placeIdString } = queryStringParameters;
-  const placeId = new import_mongodb.ObjectId(placeIdString);
+  const placeId = new import_mongodb2.ObjectId(placeIdString);
   const placeRepository = new PlaceRepository_default(db);
   const place = {
     name: body.name,
     percentage: {
-      tax: body.taxPercentage,
-      service: body.servicePercentage
+      tax: new import_mongodb2.Double(body.taxPercentage),
+      service: new import_mongodb2.Double(body.servicePercentage)
     },
-    taxPriority: body.taxPriority
+    taxPriority: TaxPriority[body.taxPriority]
   };
   await placeRepository.update(placeId, place);
   const response = {

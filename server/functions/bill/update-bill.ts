@@ -3,11 +3,33 @@ import { BaseResponse } from '../../interface/response'
 import { normalizeDate } from '../../helper/date'
 import BillDetailRepository from '../../repository/BillDetailRepository'
 import BillRepository from '../../repository/BillRepository'
+import { BillDetail } from '../../interface/entity'
+
+interface MenuRequestBody {
+  id: string,
+  name: string,
+  price: number
+}
+
+interface PersonRequestBody {
+  name: string,
+  menus: MenuRequestBody[]
+}
+
+interface RequestBody {
+  placeId: string,
+  date: number,
+  persons: PersonRequestBody[]
+}
+
+interface QueryParameters {
+  billId: string
+}
 
 const updateBill = async (db: Db, queryStringParameters, bodyString: string | null) => {
-  const body = JSON.parse(bodyString || '')
+  const body = JSON.parse(bodyString || '') as RequestBody
 
-  const { billId: billIdString } = queryStringParameters
+  const { billId: billIdString } = queryStringParameters as QueryParameters
   const billId = new ObjectId(billIdString)
 
   const billRepository = new BillRepository(db)
@@ -25,11 +47,16 @@ const updateBill = async (db: Db, queryStringParameters, bodyString: string | nu
 
 
   await billDetailRepository.deleteByBillId(billId)
-  const billDetails = persons.flatMap(person => {
+  const billDetails: BillDetail[] = persons.flatMap(person => {
     return person.menus.map(({ id, name, price }) => ({
       billId,
       person: person.name,
-      menu: { id, name, price }
+      menu: {
+        _id: id,
+        name,
+        price: Long.fromNumber(price),
+        placeId: body.placeId
+      }
     }))
   })
   await billDetailRepository.saveAll(billDetails)

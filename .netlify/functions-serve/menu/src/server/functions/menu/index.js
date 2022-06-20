@@ -1242,17 +1242,17 @@ var require_long = __commonJS({
     var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
     var INT_CACHE = {};
     var UINT_CACHE = {};
-    var Long = function() {
-      function Long2(low, high, unsigned) {
+    var Long3 = function() {
+      function Long4(low, high, unsigned) {
         if (low === void 0) {
           low = 0;
         }
-        if (!(this instanceof Long2))
-          return new Long2(low, high, unsigned);
+        if (!(this instanceof Long4))
+          return new Long4(low, high, unsigned);
         if (typeof low === "bigint") {
-          Object.assign(this, Long2.fromBigInt(low, !!high));
+          Object.assign(this, Long4.fromBigInt(low, !!high));
         } else if (typeof low === "string") {
-          Object.assign(this, Long2.fromString(low, !!high));
+          Object.assign(this, Long4.fromString(low, !!high));
         } else {
           this.low = low | 0;
           this.high = high | 0;
@@ -1265,10 +1265,10 @@ var require_long = __commonJS({
           enumerable: false
         });
       }
-      Long2.fromBits = function(lowBits, highBits, unsigned) {
-        return new Long2(lowBits, highBits, unsigned);
+      Long4.fromBits = function(lowBits, highBits, unsigned) {
+        return new Long4(lowBits, highBits, unsigned);
       };
-      Long2.fromInt = function(value, unsigned) {
+      Long4.fromInt = function(value, unsigned) {
         var obj, cachedObj, cache;
         if (unsigned) {
           value >>>= 0;
@@ -1277,7 +1277,7 @@ var require_long = __commonJS({
             if (cachedObj)
               return cachedObj;
           }
-          obj = Long2.fromBits(value, (value | 0) < 0 ? -1 : 0, true);
+          obj = Long4.fromBits(value, (value | 0) < 0 ? -1 : 0, true);
           if (cache)
             UINT_CACHE[value] = obj;
           return obj;
@@ -1288,38 +1288,38 @@ var require_long = __commonJS({
             if (cachedObj)
               return cachedObj;
           }
-          obj = Long2.fromBits(value, value < 0 ? -1 : 0, false);
+          obj = Long4.fromBits(value, value < 0 ? -1 : 0, false);
           if (cache)
             INT_CACHE[value] = obj;
           return obj;
         }
       };
-      Long2.fromNumber = function(value, unsigned) {
+      Long4.fromNumber = function(value, unsigned) {
         if (isNaN(value))
-          return unsigned ? Long2.UZERO : Long2.ZERO;
+          return unsigned ? Long4.UZERO : Long4.ZERO;
         if (unsigned) {
           if (value < 0)
-            return Long2.UZERO;
+            return Long4.UZERO;
           if (value >= TWO_PWR_64_DBL)
-            return Long2.MAX_UNSIGNED_VALUE;
+            return Long4.MAX_UNSIGNED_VALUE;
         } else {
           if (value <= -TWO_PWR_63_DBL)
-            return Long2.MIN_VALUE;
+            return Long4.MIN_VALUE;
           if (value + 1 >= TWO_PWR_63_DBL)
-            return Long2.MAX_VALUE;
+            return Long4.MAX_VALUE;
         }
         if (value < 0)
-          return Long2.fromNumber(-value, unsigned).neg();
-        return Long2.fromBits(value % TWO_PWR_32_DBL | 0, value / TWO_PWR_32_DBL | 0, unsigned);
+          return Long4.fromNumber(-value, unsigned).neg();
+        return Long4.fromBits(value % TWO_PWR_32_DBL | 0, value / TWO_PWR_32_DBL | 0, unsigned);
       };
-      Long2.fromBigInt = function(value, unsigned) {
-        return Long2.fromString(value.toString(), unsigned);
+      Long4.fromBigInt = function(value, unsigned) {
+        return Long4.fromString(value.toString(), unsigned);
       };
-      Long2.fromString = function(str, unsigned, radix) {
+      Long4.fromString = function(str, unsigned, radix) {
         if (str.length === 0)
           throw Error("empty string");
         if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity")
-          return Long2.ZERO;
+          return Long4.ZERO;
         if (typeof unsigned === "number") {
           radix = unsigned, unsigned = false;
         } else {
@@ -1332,45 +1332,45 @@ var require_long = __commonJS({
         if ((p = str.indexOf("-")) > 0)
           throw Error("interior hyphen");
         else if (p === 0) {
-          return Long2.fromString(str.substring(1), unsigned, radix).neg();
+          return Long4.fromString(str.substring(1), unsigned, radix).neg();
         }
-        var radixToPower = Long2.fromNumber(Math.pow(radix, 8));
-        var result = Long2.ZERO;
+        var radixToPower = Long4.fromNumber(Math.pow(radix, 8));
+        var result = Long4.ZERO;
         for (var i = 0; i < str.length; i += 8) {
           var size = Math.min(8, str.length - i), value = parseInt(str.substring(i, i + size), radix);
           if (size < 8) {
-            var power = Long2.fromNumber(Math.pow(radix, size));
-            result = result.mul(power).add(Long2.fromNumber(value));
+            var power = Long4.fromNumber(Math.pow(radix, size));
+            result = result.mul(power).add(Long4.fromNumber(value));
           } else {
             result = result.mul(radixToPower);
-            result = result.add(Long2.fromNumber(value));
+            result = result.add(Long4.fromNumber(value));
           }
         }
         result.unsigned = unsigned;
         return result;
       };
-      Long2.fromBytes = function(bytes, unsigned, le) {
-        return le ? Long2.fromBytesLE(bytes, unsigned) : Long2.fromBytesBE(bytes, unsigned);
+      Long4.fromBytes = function(bytes, unsigned, le) {
+        return le ? Long4.fromBytesLE(bytes, unsigned) : Long4.fromBytesBE(bytes, unsigned);
       };
-      Long2.fromBytesLE = function(bytes, unsigned) {
-        return new Long2(bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24, bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24, unsigned);
+      Long4.fromBytesLE = function(bytes, unsigned) {
+        return new Long4(bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24, bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24, unsigned);
       };
-      Long2.fromBytesBE = function(bytes, unsigned) {
-        return new Long2(bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7], bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], unsigned);
+      Long4.fromBytesBE = function(bytes, unsigned) {
+        return new Long4(bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7], bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], unsigned);
       };
-      Long2.isLong = function(value) {
+      Long4.isLong = function(value) {
         return utils_1.isObjectLike(value) && value["__isLong__"] === true;
       };
-      Long2.fromValue = function(val, unsigned) {
+      Long4.fromValue = function(val, unsigned) {
         if (typeof val === "number")
-          return Long2.fromNumber(val, unsigned);
+          return Long4.fromNumber(val, unsigned);
         if (typeof val === "string")
-          return Long2.fromString(val, unsigned);
-        return Long2.fromBits(val.low, val.high, typeof unsigned === "boolean" ? unsigned : val.unsigned);
+          return Long4.fromString(val, unsigned);
+        return Long4.fromBits(val.low, val.high, typeof unsigned === "boolean" ? unsigned : val.unsigned);
       };
-      Long2.prototype.add = function(addend) {
-        if (!Long2.isLong(addend))
-          addend = Long2.fromValue(addend);
+      Long4.prototype.add = function(addend) {
+        if (!Long4.isLong(addend))
+          addend = Long4.fromValue(addend);
         var a48 = this.high >>> 16;
         var a32 = this.high & 65535;
         var a16 = this.low >>> 16;
@@ -1391,16 +1391,16 @@ var require_long = __commonJS({
         c32 &= 65535;
         c48 += a48 + b48;
         c48 &= 65535;
-        return Long2.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+        return Long4.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
       };
-      Long2.prototype.and = function(other) {
-        if (!Long2.isLong(other))
-          other = Long2.fromValue(other);
-        return Long2.fromBits(this.low & other.low, this.high & other.high, this.unsigned);
+      Long4.prototype.and = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low & other.low, this.high & other.high, this.unsigned);
       };
-      Long2.prototype.compare = function(other) {
-        if (!Long2.isLong(other))
-          other = Long2.fromValue(other);
+      Long4.prototype.compare = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
         if (this.eq(other))
           return 0;
         var thisNeg = this.isNegative(), otherNeg = other.isNegative();
@@ -1412,12 +1412,12 @@ var require_long = __commonJS({
           return this.sub(other).isNegative() ? -1 : 1;
         return other.high >>> 0 > this.high >>> 0 || other.high === this.high && other.low >>> 0 > this.low >>> 0 ? -1 : 1;
       };
-      Long2.prototype.comp = function(other) {
+      Long4.prototype.comp = function(other) {
         return this.compare(other);
       };
-      Long2.prototype.divide = function(divisor) {
-        if (!Long2.isLong(divisor))
-          divisor = Long2.fromValue(divisor);
+      Long4.prototype.divide = function(divisor) {
+        if (!Long4.isLong(divisor))
+          divisor = Long4.fromValue(divisor);
         if (divisor.isZero())
           throw Error("division by zero");
         if (wasm) {
@@ -1425,93 +1425,93 @@ var require_long = __commonJS({
             return this;
           }
           var low = (this.unsigned ? wasm.div_u : wasm.div_s)(this.low, this.high, divisor.low, divisor.high);
-          return Long2.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         if (this.isZero())
-          return this.unsigned ? Long2.UZERO : Long2.ZERO;
+          return this.unsigned ? Long4.UZERO : Long4.ZERO;
         var approx, rem, res;
         if (!this.unsigned) {
-          if (this.eq(Long2.MIN_VALUE)) {
-            if (divisor.eq(Long2.ONE) || divisor.eq(Long2.NEG_ONE))
-              return Long2.MIN_VALUE;
-            else if (divisor.eq(Long2.MIN_VALUE))
-              return Long2.ONE;
+          if (this.eq(Long4.MIN_VALUE)) {
+            if (divisor.eq(Long4.ONE) || divisor.eq(Long4.NEG_ONE))
+              return Long4.MIN_VALUE;
+            else if (divisor.eq(Long4.MIN_VALUE))
+              return Long4.ONE;
             else {
               var halfThis = this.shr(1);
               approx = halfThis.div(divisor).shl(1);
-              if (approx.eq(Long2.ZERO)) {
-                return divisor.isNegative() ? Long2.ONE : Long2.NEG_ONE;
+              if (approx.eq(Long4.ZERO)) {
+                return divisor.isNegative() ? Long4.ONE : Long4.NEG_ONE;
               } else {
                 rem = this.sub(divisor.mul(approx));
                 res = approx.add(rem.div(divisor));
                 return res;
               }
             }
-          } else if (divisor.eq(Long2.MIN_VALUE))
-            return this.unsigned ? Long2.UZERO : Long2.ZERO;
+          } else if (divisor.eq(Long4.MIN_VALUE))
+            return this.unsigned ? Long4.UZERO : Long4.ZERO;
           if (this.isNegative()) {
             if (divisor.isNegative())
               return this.neg().div(divisor.neg());
             return this.neg().div(divisor).neg();
           } else if (divisor.isNegative())
             return this.div(divisor.neg()).neg();
-          res = Long2.ZERO;
+          res = Long4.ZERO;
         } else {
           if (!divisor.unsigned)
             divisor = divisor.toUnsigned();
           if (divisor.gt(this))
-            return Long2.UZERO;
+            return Long4.UZERO;
           if (divisor.gt(this.shru(1)))
-            return Long2.UONE;
-          res = Long2.UZERO;
+            return Long4.UONE;
+          res = Long4.UZERO;
         }
         rem = this;
         while (rem.gte(divisor)) {
           approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
           var log2 = Math.ceil(Math.log(approx) / Math.LN2);
           var delta = log2 <= 48 ? 1 : Math.pow(2, log2 - 48);
-          var approxRes = Long2.fromNumber(approx);
+          var approxRes = Long4.fromNumber(approx);
           var approxRem = approxRes.mul(divisor);
           while (approxRem.isNegative() || approxRem.gt(rem)) {
             approx -= delta;
-            approxRes = Long2.fromNumber(approx, this.unsigned);
+            approxRes = Long4.fromNumber(approx, this.unsigned);
             approxRem = approxRes.mul(divisor);
           }
           if (approxRes.isZero())
-            approxRes = Long2.ONE;
+            approxRes = Long4.ONE;
           res = res.add(approxRes);
           rem = rem.sub(approxRem);
         }
         return res;
       };
-      Long2.prototype.div = function(divisor) {
+      Long4.prototype.div = function(divisor) {
         return this.divide(divisor);
       };
-      Long2.prototype.equals = function(other) {
-        if (!Long2.isLong(other))
-          other = Long2.fromValue(other);
+      Long4.prototype.equals = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
         if (this.unsigned !== other.unsigned && this.high >>> 31 === 1 && other.high >>> 31 === 1)
           return false;
         return this.high === other.high && this.low === other.low;
       };
-      Long2.prototype.eq = function(other) {
+      Long4.prototype.eq = function(other) {
         return this.equals(other);
       };
-      Long2.prototype.getHighBits = function() {
+      Long4.prototype.getHighBits = function() {
         return this.high;
       };
-      Long2.prototype.getHighBitsUnsigned = function() {
+      Long4.prototype.getHighBitsUnsigned = function() {
         return this.high >>> 0;
       };
-      Long2.prototype.getLowBits = function() {
+      Long4.prototype.getLowBits = function() {
         return this.low;
       };
-      Long2.prototype.getLowBitsUnsigned = function() {
+      Long4.prototype.getLowBitsUnsigned = function() {
         return this.low >>> 0;
       };
-      Long2.prototype.getNumBitsAbs = function() {
+      Long4.prototype.getNumBitsAbs = function() {
         if (this.isNegative()) {
-          return this.eq(Long2.MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
+          return this.eq(Long4.MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
         }
         var val = this.high !== 0 ? this.high : this.low;
         var bit;
@@ -1520,78 +1520,78 @@ var require_long = __commonJS({
             break;
         return this.high !== 0 ? bit + 33 : bit + 1;
       };
-      Long2.prototype.greaterThan = function(other) {
+      Long4.prototype.greaterThan = function(other) {
         return this.comp(other) > 0;
       };
-      Long2.prototype.gt = function(other) {
+      Long4.prototype.gt = function(other) {
         return this.greaterThan(other);
       };
-      Long2.prototype.greaterThanOrEqual = function(other) {
+      Long4.prototype.greaterThanOrEqual = function(other) {
         return this.comp(other) >= 0;
       };
-      Long2.prototype.gte = function(other) {
+      Long4.prototype.gte = function(other) {
         return this.greaterThanOrEqual(other);
       };
-      Long2.prototype.ge = function(other) {
+      Long4.prototype.ge = function(other) {
         return this.greaterThanOrEqual(other);
       };
-      Long2.prototype.isEven = function() {
+      Long4.prototype.isEven = function() {
         return (this.low & 1) === 0;
       };
-      Long2.prototype.isNegative = function() {
+      Long4.prototype.isNegative = function() {
         return !this.unsigned && this.high < 0;
       };
-      Long2.prototype.isOdd = function() {
+      Long4.prototype.isOdd = function() {
         return (this.low & 1) === 1;
       };
-      Long2.prototype.isPositive = function() {
+      Long4.prototype.isPositive = function() {
         return this.unsigned || this.high >= 0;
       };
-      Long2.prototype.isZero = function() {
+      Long4.prototype.isZero = function() {
         return this.high === 0 && this.low === 0;
       };
-      Long2.prototype.lessThan = function(other) {
+      Long4.prototype.lessThan = function(other) {
         return this.comp(other) < 0;
       };
-      Long2.prototype.lt = function(other) {
+      Long4.prototype.lt = function(other) {
         return this.lessThan(other);
       };
-      Long2.prototype.lessThanOrEqual = function(other) {
+      Long4.prototype.lessThanOrEqual = function(other) {
         return this.comp(other) <= 0;
       };
-      Long2.prototype.lte = function(other) {
+      Long4.prototype.lte = function(other) {
         return this.lessThanOrEqual(other);
       };
-      Long2.prototype.modulo = function(divisor) {
-        if (!Long2.isLong(divisor))
-          divisor = Long2.fromValue(divisor);
+      Long4.prototype.modulo = function(divisor) {
+        if (!Long4.isLong(divisor))
+          divisor = Long4.fromValue(divisor);
         if (wasm) {
           var low = (this.unsigned ? wasm.rem_u : wasm.rem_s)(this.low, this.high, divisor.low, divisor.high);
-          return Long2.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         return this.sub(this.div(divisor).mul(divisor));
       };
-      Long2.prototype.mod = function(divisor) {
+      Long4.prototype.mod = function(divisor) {
         return this.modulo(divisor);
       };
-      Long2.prototype.rem = function(divisor) {
+      Long4.prototype.rem = function(divisor) {
         return this.modulo(divisor);
       };
-      Long2.prototype.multiply = function(multiplier) {
+      Long4.prototype.multiply = function(multiplier) {
         if (this.isZero())
-          return Long2.ZERO;
-        if (!Long2.isLong(multiplier))
-          multiplier = Long2.fromValue(multiplier);
+          return Long4.ZERO;
+        if (!Long4.isLong(multiplier))
+          multiplier = Long4.fromValue(multiplier);
         if (wasm) {
           var low = wasm.mul(this.low, this.high, multiplier.low, multiplier.high);
-          return Long2.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         if (multiplier.isZero())
-          return Long2.ZERO;
-        if (this.eq(Long2.MIN_VALUE))
-          return multiplier.isOdd() ? Long2.MIN_VALUE : Long2.ZERO;
-        if (multiplier.eq(Long2.MIN_VALUE))
-          return this.isOdd() ? Long2.MIN_VALUE : Long2.ZERO;
+          return Long4.ZERO;
+        if (this.eq(Long4.MIN_VALUE))
+          return multiplier.isOdd() ? Long4.MIN_VALUE : Long4.ZERO;
+        if (multiplier.eq(Long4.MIN_VALUE))
+          return this.isOdd() ? Long4.MIN_VALUE : Long4.ZERO;
         if (this.isNegative()) {
           if (multiplier.isNegative())
             return this.neg().mul(multiplier.neg());
@@ -1599,8 +1599,8 @@ var require_long = __commonJS({
             return this.neg().mul(multiplier).neg();
         } else if (multiplier.isNegative())
           return this.mul(multiplier.neg()).neg();
-        if (this.lt(Long2.TWO_PWR_24) && multiplier.lt(Long2.TWO_PWR_24))
-          return Long2.fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
+        if (this.lt(Long4.TWO_PWR_24) && multiplier.lt(Long4.TWO_PWR_24))
+          return Long4.fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
         var a48 = this.high >>> 16;
         var a32 = this.high & 65535;
         var a16 = this.low >>> 16;
@@ -1630,64 +1630,64 @@ var require_long = __commonJS({
         c32 &= 65535;
         c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
         c48 &= 65535;
-        return Long2.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+        return Long4.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
       };
-      Long2.prototype.mul = function(multiplier) {
+      Long4.prototype.mul = function(multiplier) {
         return this.multiply(multiplier);
       };
-      Long2.prototype.negate = function() {
-        if (!this.unsigned && this.eq(Long2.MIN_VALUE))
-          return Long2.MIN_VALUE;
-        return this.not().add(Long2.ONE);
+      Long4.prototype.negate = function() {
+        if (!this.unsigned && this.eq(Long4.MIN_VALUE))
+          return Long4.MIN_VALUE;
+        return this.not().add(Long4.ONE);
       };
-      Long2.prototype.neg = function() {
+      Long4.prototype.neg = function() {
         return this.negate();
       };
-      Long2.prototype.not = function() {
-        return Long2.fromBits(~this.low, ~this.high, this.unsigned);
+      Long4.prototype.not = function() {
+        return Long4.fromBits(~this.low, ~this.high, this.unsigned);
       };
-      Long2.prototype.notEquals = function(other) {
+      Long4.prototype.notEquals = function(other) {
         return !this.equals(other);
       };
-      Long2.prototype.neq = function(other) {
+      Long4.prototype.neq = function(other) {
         return this.notEquals(other);
       };
-      Long2.prototype.ne = function(other) {
+      Long4.prototype.ne = function(other) {
         return this.notEquals(other);
       };
-      Long2.prototype.or = function(other) {
-        if (!Long2.isLong(other))
-          other = Long2.fromValue(other);
-        return Long2.fromBits(this.low | other.low, this.high | other.high, this.unsigned);
+      Long4.prototype.or = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low | other.low, this.high | other.high, this.unsigned);
       };
-      Long2.prototype.shiftLeft = function(numBits) {
-        if (Long2.isLong(numBits))
+      Long4.prototype.shiftLeft = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         if ((numBits &= 63) === 0)
           return this;
         else if (numBits < 32)
-          return Long2.fromBits(this.low << numBits, this.high << numBits | this.low >>> 32 - numBits, this.unsigned);
+          return Long4.fromBits(this.low << numBits, this.high << numBits | this.low >>> 32 - numBits, this.unsigned);
         else
-          return Long2.fromBits(0, this.low << numBits - 32, this.unsigned);
+          return Long4.fromBits(0, this.low << numBits - 32, this.unsigned);
       };
-      Long2.prototype.shl = function(numBits) {
+      Long4.prototype.shl = function(numBits) {
         return this.shiftLeft(numBits);
       };
-      Long2.prototype.shiftRight = function(numBits) {
-        if (Long2.isLong(numBits))
+      Long4.prototype.shiftRight = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         if ((numBits &= 63) === 0)
           return this;
         else if (numBits < 32)
-          return Long2.fromBits(this.low >>> numBits | this.high << 32 - numBits, this.high >> numBits, this.unsigned);
+          return Long4.fromBits(this.low >>> numBits | this.high << 32 - numBits, this.high >> numBits, this.unsigned);
         else
-          return Long2.fromBits(this.high >> numBits - 32, this.high >= 0 ? 0 : -1, this.unsigned);
+          return Long4.fromBits(this.high >> numBits - 32, this.high >= 0 ? 0 : -1, this.unsigned);
       };
-      Long2.prototype.shr = function(numBits) {
+      Long4.prototype.shr = function(numBits) {
         return this.shiftRight(numBits);
       };
-      Long2.prototype.shiftRightUnsigned = function(numBits) {
-        if (Long2.isLong(numBits))
+      Long4.prototype.shiftRightUnsigned = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         numBits &= 63;
         if (numBits === 0)
@@ -1696,42 +1696,42 @@ var require_long = __commonJS({
           var high = this.high;
           if (numBits < 32) {
             var low = this.low;
-            return Long2.fromBits(low >>> numBits | high << 32 - numBits, high >>> numBits, this.unsigned);
+            return Long4.fromBits(low >>> numBits | high << 32 - numBits, high >>> numBits, this.unsigned);
           } else if (numBits === 32)
-            return Long2.fromBits(high, 0, this.unsigned);
+            return Long4.fromBits(high, 0, this.unsigned);
           else
-            return Long2.fromBits(high >>> numBits - 32, 0, this.unsigned);
+            return Long4.fromBits(high >>> numBits - 32, 0, this.unsigned);
         }
       };
-      Long2.prototype.shr_u = function(numBits) {
+      Long4.prototype.shr_u = function(numBits) {
         return this.shiftRightUnsigned(numBits);
       };
-      Long2.prototype.shru = function(numBits) {
+      Long4.prototype.shru = function(numBits) {
         return this.shiftRightUnsigned(numBits);
       };
-      Long2.prototype.subtract = function(subtrahend) {
-        if (!Long2.isLong(subtrahend))
-          subtrahend = Long2.fromValue(subtrahend);
+      Long4.prototype.subtract = function(subtrahend) {
+        if (!Long4.isLong(subtrahend))
+          subtrahend = Long4.fromValue(subtrahend);
         return this.add(subtrahend.neg());
       };
-      Long2.prototype.sub = function(subtrahend) {
+      Long4.prototype.sub = function(subtrahend) {
         return this.subtract(subtrahend);
       };
-      Long2.prototype.toInt = function() {
+      Long4.prototype.toInt = function() {
         return this.unsigned ? this.low >>> 0 : this.low;
       };
-      Long2.prototype.toNumber = function() {
+      Long4.prototype.toNumber = function() {
         if (this.unsigned)
           return (this.high >>> 0) * TWO_PWR_32_DBL + (this.low >>> 0);
         return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
       };
-      Long2.prototype.toBigInt = function() {
+      Long4.prototype.toBigInt = function() {
         return BigInt(this.toString());
       };
-      Long2.prototype.toBytes = function(le) {
+      Long4.prototype.toBytes = function(le) {
         return le ? this.toBytesLE() : this.toBytesBE();
       };
-      Long2.prototype.toBytesLE = function() {
+      Long4.prototype.toBytesLE = function() {
         var hi = this.high, lo = this.low;
         return [
           lo & 255,
@@ -1744,7 +1744,7 @@ var require_long = __commonJS({
           hi >>> 24
         ];
       };
-      Long2.prototype.toBytesBE = function() {
+      Long4.prototype.toBytesBE = function() {
         var hi = this.high, lo = this.low;
         return [
           hi >>> 24,
@@ -1757,25 +1757,25 @@ var require_long = __commonJS({
           lo & 255
         ];
       };
-      Long2.prototype.toSigned = function() {
+      Long4.prototype.toSigned = function() {
         if (!this.unsigned)
           return this;
-        return Long2.fromBits(this.low, this.high, false);
+        return Long4.fromBits(this.low, this.high, false);
       };
-      Long2.prototype.toString = function(radix) {
+      Long4.prototype.toString = function(radix) {
         radix = radix || 10;
         if (radix < 2 || 36 < radix)
           throw RangeError("radix");
         if (this.isZero())
           return "0";
         if (this.isNegative()) {
-          if (this.eq(Long2.MIN_VALUE)) {
-            var radixLong = Long2.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
+          if (this.eq(Long4.MIN_VALUE)) {
+            var radixLong = Long4.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
             return div.toString(radix) + rem1.toInt().toString(radix);
           } else
             return "-" + this.neg().toString(radix);
         }
-        var radixToPower = Long2.fromNumber(Math.pow(radix, 6), this.unsigned);
+        var radixToPower = Long4.fromNumber(Math.pow(radix, 6), this.unsigned);
         var rem = this;
         var result = "";
         while (true) {
@@ -1792,51 +1792,51 @@ var require_long = __commonJS({
           }
         }
       };
-      Long2.prototype.toUnsigned = function() {
+      Long4.prototype.toUnsigned = function() {
         if (this.unsigned)
           return this;
-        return Long2.fromBits(this.low, this.high, true);
+        return Long4.fromBits(this.low, this.high, true);
       };
-      Long2.prototype.xor = function(other) {
-        if (!Long2.isLong(other))
-          other = Long2.fromValue(other);
-        return Long2.fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
+      Long4.prototype.xor = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
       };
-      Long2.prototype.eqz = function() {
+      Long4.prototype.eqz = function() {
         return this.isZero();
       };
-      Long2.prototype.le = function(other) {
+      Long4.prototype.le = function(other) {
         return this.lessThanOrEqual(other);
       };
-      Long2.prototype.toExtendedJSON = function(options) {
+      Long4.prototype.toExtendedJSON = function(options) {
         if (options && options.relaxed)
           return this.toNumber();
         return { $numberLong: this.toString() };
       };
-      Long2.fromExtendedJSON = function(doc, options) {
-        var result = Long2.fromString(doc.$numberLong);
+      Long4.fromExtendedJSON = function(doc, options) {
+        var result = Long4.fromString(doc.$numberLong);
         return options && options.relaxed ? result.toNumber() : result;
       };
-      Long2.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      Long4.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      Long2.prototype.inspect = function() {
+      Long4.prototype.inspect = function() {
         return 'new Long("' + this.toString() + '"' + (this.unsigned ? ", true" : "") + ")";
       };
-      Long2.TWO_PWR_24 = Long2.fromInt(TWO_PWR_24_DBL);
-      Long2.MAX_UNSIGNED_VALUE = Long2.fromBits(4294967295 | 0, 4294967295 | 0, true);
-      Long2.ZERO = Long2.fromInt(0);
-      Long2.UZERO = Long2.fromInt(0, true);
-      Long2.ONE = Long2.fromInt(1);
-      Long2.UONE = Long2.fromInt(1, true);
-      Long2.NEG_ONE = Long2.fromInt(-1);
-      Long2.MAX_VALUE = Long2.fromBits(4294967295 | 0, 2147483647 | 0, false);
-      Long2.MIN_VALUE = Long2.fromBits(0, 2147483648 | 0, false);
-      return Long2;
+      Long4.TWO_PWR_24 = Long4.fromInt(TWO_PWR_24_DBL);
+      Long4.MAX_UNSIGNED_VALUE = Long4.fromBits(4294967295 | 0, 4294967295 | 0, true);
+      Long4.ZERO = Long4.fromInt(0);
+      Long4.UZERO = Long4.fromInt(0, true);
+      Long4.ONE = Long4.fromInt(1);
+      Long4.UONE = Long4.fromInt(1, true);
+      Long4.NEG_ONE = Long4.fromInt(-1);
+      Long4.MAX_VALUE = Long4.fromBits(4294967295 | 0, 2147483647 | 0, false);
+      Long4.MIN_VALUE = Long4.fromBits(0, 2147483648 | 0, false);
+      return Long4;
     }();
-    exports.Long = Long;
-    Object.defineProperty(Long.prototype, "__isLong__", { value: true });
-    Object.defineProperty(Long.prototype, "_bsontype", { value: "Long" });
+    exports.Long = Long3;
+    Object.defineProperty(Long3.prototype, "__isLong__", { value: true });
+    Object.defineProperty(Long3.prototype, "_bsontype", { value: "Long" });
   }
 });
 
@@ -26639,11 +26639,14 @@ var getMenus = async (db, queryStringParameters) => {
   const menuRepository = new MenuRepository_default(db);
   const menus = await menuRepository.findAll(placeId);
   const menuResponse = {
-    data: menus.map((menu) => ({
-      id: menu._id.toString(),
-      name: menu.name,
-      price: +menu.price
-    }))
+    data: menus.map((menu) => {
+      const id = menu._id || "";
+      return {
+        id: id.toString(),
+        name: menu.name,
+        price: +menu.price
+      };
+    })
   };
   return {
     statusCode: 200,
@@ -26661,7 +26664,7 @@ var saveMenu = async (db, queryStringParameters, bodyString) => {
   const menuRepository = new MenuRepository_default(db);
   const newMenu = {
     name: body.name,
-    price: body.price,
+    price: import_mongodb3.Long.fromNumber(body.price),
     placeId
   };
   await menuRepository.save(newMenu);
@@ -26684,7 +26687,7 @@ var updateMenu = async (db, queryStringParameters, bodyString) => {
   const menuRepository = new MenuRepository_default(db);
   const menu = {
     name: body.name,
-    price: body.price
+    price: import_mongodb4.Long.fromNumber(body.price)
   };
   await menuRepository.update(menuId, menu);
   const response = {

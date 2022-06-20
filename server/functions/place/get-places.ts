@@ -9,18 +9,25 @@ interface GetPlacesResponse {
   name: string
 }
 
+interface QueryParameters {
+  page: number
+}
+
 const getPlaces = async (db: mongodb.Db, queryStringParameters) => {
-  const { page } = queryStringParameters
+  const { page } = queryStringParameters as QueryParameters
 
   const placeRepository = new PlaceRepository(db)
   const places: Place[] = await placeRepository.findPaginated(page)
   const totalPage = await placeRepository.getTotalPage()
 
   const placesResponse: BaseResponse<GetPlacesResponse[]> = {
-    data: places.map(place => ({
-      id: place._id.toString(),
-      name: place.name
-    })),
+    data: places.map(place => {
+      const id = place._id || ''
+      return {
+        id: id.toString(),
+        name: place.name
+      }
+    }),
     paging: {
       page: +page,
       itemPerPage: ITEM_PER_PAGE,

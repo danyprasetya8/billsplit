@@ -26732,7 +26732,12 @@ var saveBill = async (db, bodyString) => {
     return person.menus.map(({ id, name, price }) => ({
       billId,
       person: person.name,
-      menu: { id, name, price }
+      menu: {
+        _id: id,
+        name,
+        price: import_mongodb2.Long.fromNumber(price),
+        placeId: body.placeId
+      }
     }));
   });
   await billDetailRepository.saveAll(billDetails);
@@ -26767,7 +26772,12 @@ var updateBill = async (db, queryStringParameters, bodyString) => {
     return person.menus.map(({ id, name, price }) => ({
       billId,
       person: person.name,
-      menu: { id, name, price }
+      menu: {
+        _id: id,
+        name,
+        price: import_mongodb3.Long.fromNumber(price),
+        placeId: body.placeId
+      }
     }));
   });
   await billDetailRepository.saveAll(billDetails);

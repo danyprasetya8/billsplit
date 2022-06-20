@@ -23,12 +23,12 @@ interface RequestBody {
 }
 
 const saveBill = async (db: Db, bodyString: string | null) => {
-  const body = JSON.parse(bodyString || '')
+  const body: RequestBody = JSON.parse(bodyString || '')
 
   const billRepository = new BillRepository(db)
   const billDetailRepository = new BillDetailRepository(db)
 
-  const persons = body.persons || []
+  const persons: PersonRequestBody[] = body.persons || []
 
   const bill: Bill = {
     placeId: new ObjectId(body.placeId),
@@ -41,7 +41,12 @@ const saveBill = async (db: Db, bodyString: string | null) => {
     return person.menus.map(({ id, name, price }) => ({
       billId,
       person: person.name,
-      menu: { id, name, price }
+      menu: {
+        _id: id,
+        name,
+        price: Long.fromNumber(price),
+        placeId: body.placeId
+      }
     }))
   })
   await billDetailRepository.saveAll(billDetails)

@@ -2,8 +2,12 @@ import { Db, ObjectId } from 'mongodb'
 import { BaseResponse } from '../../interface/response'
 import MenuRepository from '../../repository/MenuRepository'
 
+interface QueryParameters {
+  menuId: string
+}
+
 const deleteMenu = async (db: Db, queryStringParameters) => {
-  const { menuId: menuIdString } = queryStringParameters
+  const { menuId: menuIdString } = queryStringParameters as QueryParameters
   const menuId = new ObjectId(menuIdString)
 
   const menuRepository = new MenuRepository(db)

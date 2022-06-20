@@ -1,12 +1,23 @@
-import { Db, ObjectId } from 'mongodb'
-import { Place } from '../../interface/entity'
+import { Db, Double, ObjectId } from 'mongodb'
+import { Place, TaxPriority } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
 
-const updatePlace = async (db: Db, queryStringParameters, bodyString: string | null) => {
-  const body = JSON.parse(bodyString || '')
+interface QueryParameters {
+  placeId: string
+}
 
-  const { placeId: placeIdString }: { placeId: string } = queryStringParameters
+interface RequestBody {
+  name: string,
+  taxPercentage: number,
+  servicePercentage: number,
+  taxPriority: string
+}
+
+const updatePlace = async (db: Db, queryStringParameters, bodyString: string | null) => {
+  const body = JSON.parse(bodyString || '') as RequestBody
+
+  const { placeId: placeIdString } = queryStringParameters as QueryParameters
   const placeId: ObjectId = new ObjectId(placeIdString)
 
   const placeRepository = new PlaceRepository(db)
@@ -14,10 +25,10 @@ const updatePlace = async (db: Db, queryStringParameters, bodyString: string | n
   const place: Partial<Place> = {
     name: body.name,
     percentage: {
-      tax: body.taxPercentage,
-      service: body.servicePercentage
+      tax: new Double(body.taxPercentage),
+      service: new Double(body.servicePercentage)
     },
-    taxPriority: body.taxPriority
+    taxPriority: TaxPriority[body.taxPriority],
   }
   await placeRepository.update(placeId, place)
 

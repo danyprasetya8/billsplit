@@ -16,11 +16,14 @@ const getMenus = async (db: Db, queryStringParameters) => {
   const menus = await menuRepository.findAll(placeId)
 
   const menuResponse: BaseResponse<GetMenuWebResponse[]> = {
-    data: menus.map(menu => ({
-      id: menu._id.toString(),
-      name: menu.name,
-      price: +menu.price
-    }))
+    data: menus.map(menu => {
+      const id = menu._id || ''
+      return {
+        id: id.toString(),
+        name: menu.name,
+        price: +menu.price
+      }
+    })
   }
   return {
     statusCode: 200,

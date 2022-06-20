@@ -10,8 +10,12 @@ interface GetBillsResponse {
   date: Long
 }
 
+interface QueryParameters {
+  page: number
+}
+
 const getBills = async (db: Db, queryStringParameters) => {
-  const { page } = queryStringParameters
+  const { page } = queryStringParameters as QueryParameters
 
   const billRepository = new BillRepository(db)
   const bills: Bill[] = await billRepository.findPaginated(page)
