@@ -1,36 +1,24 @@
-import React, { useEffect } from 'react'
-import logo from './logo.svg'
-import './App.css'
-import axios from 'axios'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import PlaceList from '@/pages/PlaceList'
+import BillList from '@/pages/BillList'
+import BaseLayout from '@/components/BaseLayout'
+import constant from '@/config/constant'
+
+const { page } = constant
 
 const App = () => {
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log(await axios.get('http://localhost:8888/.netlify/functions/menu?placeId=629bac09c93ec345ada5a697'))
-      } catch (err) {
-        console.log(err, 'err');
-      }
-    }
-    fetchData()
-  }, [])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className="App">
+        <Routes>
+          <Route path={page.base} element={<BaseLayout />}>
+            <Route index element={<PlaceList />} />
+            <Route path={page.place} element={<PlaceList />} /> 
+            <Route path={page.bill} element={<BillList />} />
+          </Route>
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 
