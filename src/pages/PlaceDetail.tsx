@@ -1,11 +1,11 @@
 import { useAppDispatch } from '@/hooks'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { getPlaceDetail } from '@/store/slices/place'
 import { getMenus } from '@/store/slices/menu'
 import { GetMenuWebResponse, GetPlaceDetailResponse } from '@/interfaces/response'
-import { ChevronLeft } from 'react-bootstrap-icons'
 import { numberFormatter } from '@/util/formatter'
 import React, { useEffect, useState } from 'react'
+import Header from '@/components/Header'
 import styled, { css } from 'styled-components'
 import constant from '@/config/constant'
 
@@ -15,19 +15,6 @@ const Container = styled.div`
   width: 100%;
   padding: 0 50px;
   margin: 25px 0;
-`
-
-const Title = styled.div`
-  font-size: 32px;
-  font-weight: 600;
-  color: #00ADB5;
-`
-
-const Line = styled.div`
-  width: 100%;
-  height: 4px;
-  background-color: #00ADB5;
-  margin: 15px 0 25px;
 `
 
 const PlaceDetail: React.FC = () => {
@@ -74,23 +61,10 @@ const PlaceDetail: React.FC = () => {
 
   return (
     <Container>
-      <div css={`
-        display: flex;
-        align-items: center;
-      `}>
-        <Link to={page.place}>
-          <ChevronLeft color="#00ADB5" size={20} css={`
-            cursor: pointer;
-            margin-right: 8px;
-          `} />
-        </Link>
-
-        <Title>
-          {placeDetail?.name}
-        </Title>
-      </div>
-
-      <Line />
+      <Header
+        title={placeDetail?.name}
+        backUrl={page.place}
+      />
 
       <div css={`
         display: flex;
