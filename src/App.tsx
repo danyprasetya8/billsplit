@@ -1,19 +1,22 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import PlaceList from '@/pages/PlaceList'
+import PlaceDetail from '@/pages/PlaceDetail'
+import PlaceList from '@/pages/PlaceList/PlaceList'
 import BillList from '@/pages/BillList'
 import BaseLayout from '@/components/BaseLayout'
 import constant from '@/config/constant'
+import styles from './App.module.css'
 
 const { page } = constant
 
-const App = () => {
+const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div className={styles.app}>
         <Routes>
           <Route path={page.base} element={<BaseLayout />}>
             <Route index element={<PlaceList />} />
-            <Route path={page.place} element={<PlaceList />} /> 
+            <Route path={page.place} element={<PlaceList />} />
+            <Route path={page.placeDetail} element={<PlaceDetail />} />
             <Route path={page.bill} element={<BillList />} />
           </Route>
         </Routes>

@@ -98,7 +98,7 @@ const BaseLayout: React.FC = () => {
       <Row style={style.row}>
         <Col
           style={style.col}
-          md={3}
+          xl={3}
         >
           <SideNavigation>
             <Container style={style.container}>

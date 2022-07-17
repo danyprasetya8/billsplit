@@ -15,5 +15,8 @@ module.exports = {
     alias: {
       '@': resolve('./src')
     }
+  },
+  babel: {
+    plugins: ['babel-plugin-styled-components']
   }
 }

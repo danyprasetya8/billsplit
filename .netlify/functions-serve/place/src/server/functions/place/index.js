@@ -26701,7 +26701,7 @@ var PlaceRepository_default = PlaceRepository;
 
 // server/functions/place/get-places.ts
 var getPlaces = async (db, queryStringParameters) => {
-  const { page } = queryStringParameters;
+  const { page = 1 } = queryStringParameters;
   const placeRepository = new PlaceRepository_default(db);
   const places = await placeRepository.findPaginated(page);
   const totalPage = await placeRepository.getTotalPage();

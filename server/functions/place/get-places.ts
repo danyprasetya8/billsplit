@@ -14,7 +14,7 @@ interface QueryParameters {
 }
 
 const getPlaces = async (db: mongodb.Db, queryStringParameters) => {
-  const { page } = queryStringParameters as QueryParameters
+  const { page = 1 } = queryStringParameters as QueryParameters
 
   const placeRepository = new PlaceRepository(db)
   const places: Place[] = await placeRepository.findPaginated(page)
