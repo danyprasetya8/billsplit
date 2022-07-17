@@ -26684,11 +26684,17 @@ var PlaceRepository = class {
     };
     return await this.places.findOne(query);
   }
-  async findPaginated(page) {
-    return await this.places.find().skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  async findPaginatedWithKeyword(page, keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    return await this.places.find(keyword ? query : {}).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
   }
-  async getTotalPage() {
-    const total = await this.places.countDocuments();
+  async getTotalPage(keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    const total = await this.places.countDocuments(keyword ? query : {});
     return Math.ceil(total / ITEM_PER_PAGE);
   }
   async save(place) {

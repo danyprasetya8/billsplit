@@ -3,12 +3,15 @@ import { BaseResponse, GetPlacesResponse, GetPlaceDetailResponse } from '@/inter
 import axios from '@/axios'
 import api from '@/config/api'
 
+interface GetPlacesParams {
+  page: number,
+  keyword: string
+}
+
 export const getPlaces = createAsyncThunk(
   'places/getPlaces',
-  async (page: number) => {
-    const response = await axios.get<BaseResponse<GetPlacesResponse[]>>(api.place, {
-      params: { page }
-    })
+  async (params: GetPlacesParams) => {
+    const response = await axios.get<BaseResponse<GetPlacesResponse[]>>(api.place, { params })
     return response.data
   }
 )

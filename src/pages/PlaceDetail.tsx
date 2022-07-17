@@ -55,7 +55,7 @@ const PlaceDetail: React.FC = () => {
   
     fetchPlaceDetail()
     fetchMenus()
-  }, [])
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toMenuElement = (menu: GetMenuWebResponse) => (
     <div key={menu.id} css={`

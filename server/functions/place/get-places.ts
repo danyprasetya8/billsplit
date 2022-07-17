@@ -10,15 +10,16 @@ interface GetPlacesResponse {
 }
 
 interface QueryParameters {
-  page: number
+  page: number,
+  keyword: string
 }
 
 const getPlaces = async (db: mongodb.Db, queryStringParameters) => {
-  const { page = 1 } = queryStringParameters as QueryParameters
+  const { page = 1, keyword } = queryStringParameters as QueryParameters
 
   const placeRepository = new PlaceRepository(db)
-  const places: Place[] = await placeRepository.findPaginated(page)
-  const totalPage = await placeRepository.getTotalPage()
+  const places: Place[] = await placeRepository.findPaginatedWithKeyword(page, keyword)
+  const totalPage = await placeRepository.getTotalPage(keyword)
 
   const placesResponse: BaseResponse<GetPlacesResponse[]> = {
     data: places.map(place => {

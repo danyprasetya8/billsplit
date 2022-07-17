@@ -26681,11 +26681,17 @@ var PlaceRepository = class {
     };
     return await this.places.findOne(query);
   }
-  async findPaginated(page) {
-    return await this.places.find().skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  async findPaginatedWithKeyword(page, keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    return await this.places.find(keyword ? query : {}).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
   }
-  async getTotalPage() {
-    const total = await this.places.countDocuments();
+  async getTotalPage(keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    const total = await this.places.countDocuments(keyword ? query : {});
     return Math.ceil(total / ITEM_PER_PAGE);
   }
   async save(place) {
@@ -26701,10 +26707,10 @@ var PlaceRepository_default = PlaceRepository;
 
 // server/functions/place/get-places.ts
 var getPlaces = async (db, queryStringParameters) => {
-  const { page = 1 } = queryStringParameters;
+  const { page = 1, keyword } = queryStringParameters;
   const placeRepository = new PlaceRepository_default(db);
-  const places = await placeRepository.findPaginated(page);
-  const totalPage = await placeRepository.getTotalPage();
+  const places = await placeRepository.findPaginatedWithKeyword(page, keyword);
+  const totalPage = await placeRepository.getTotalPage(keyword);
   const placesResponse = {
     data: places.map((place) => {
       const id = place._id || "";

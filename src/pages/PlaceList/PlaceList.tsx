@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react'
 import { getPlaces } from '@/store/slices/place'
 import { useAppDispatch } from '@/hooks'
 import { BaseResponse, GetPlacesResponse } from '@/interfaces/response'
-import { ChevronRight } from 'react-bootstrap-icons'
+import { ChevronRight, Search } from 'react-bootstrap-icons'
 import { Link } from 'react-router-dom'
 import Button from '@/components/Button'
 import Card from 'react-bootstrap/Card'
 import Pagination from '@/components/Pagination'
 import styled, { css } from 'styled-components'
 import constant from '@/config/constant'
+import debounce from '@/util/debouncer'
 
 const { page } = constant
 
@@ -45,20 +46,34 @@ const PlaceLink = styled(Link)`
   }
 `
 
+const SearchBar = styled.div`
+  padding: 12px;
+  border: 1px solid #CCC;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  width: 30%;
+`
+
 const PlaceList: React.FC = () => {
   const dispatch = useAppDispatch()
   const [places, setPlaces] = useState<GetPlacesResponse[]>([])
   const [pagination, setPagination] = useState<BaseResponse<GetPlacesResponse[]>['paging']>()
+  const [keyword, setKeyword] = useState<string>('')
 
   const fetchPlaces = async (page: number) => {
-    const places = await dispatch(getPlaces(page)).unwrap()
+    const places = await dispatch(getPlaces({ page, keyword })).unwrap()
     setPlaces(places.data)
     setPagination(places.paging)
   }
 
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debounce(() => setKeyword(e.target.value), 300)
+  }
+
   useEffect(() => {
     fetchPlaces(1)
-  }, [])
+  }, [keyword]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <>
@@ -69,9 +84,22 @@ const PlaceList: React.FC = () => {
 
         <Line />
 
-        <Button css={`width: 15%;`}>
-          Add Place
-        </Button>
+        <div css={`display: flex; justify-content: space-between; align-items: center;`}>
+          <SearchBar>
+            <Search />
+            <input
+              type="text"
+              placeholder="Search place"
+              css={`outline: none; border: none; margin-left: 10px; width: 100%;`}
+              onChange={handleSearch}
+            />
+          </SearchBar>
+
+          <Button css={`width: 15%;`}>
+            Add Place
+          </Button>
+        </div>
+
 
         <div css={`margin-top: 25px;`}>
           {
@@ -100,7 +128,7 @@ const PlaceList: React.FC = () => {
           align-self: end;
         `}>
           {
-            pagination?.page && (
+            !!places.length && pagination?.page && (
               <Pagination
                 current={pagination.page}
                 totalPage={pagination.totalPage || 0}

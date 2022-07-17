@@ -18,15 +18,21 @@ class PlaceRepository {
     return await this.places.findOne(query)
   }
 
-  public async findPaginated(page: number): Promise<Place[]> {
-    return await this.places.find()
+  public async findPaginatedWithKeyword(page: number, keyword: string): Promise<Place[]> {
+    const query: Filter<Place> = {
+      name: { $regex: keyword }
+    }
+    return await this.places.find(keyword ? query : {})
       .skip(page > 0 ? (( page - 1 ) * ITEM_PER_PAGE ) : 0)
       .limit(ITEM_PER_PAGE)
       .toArray()
   }
 
-  public async getTotalPage(): Promise<number> {
-    const total = await this.places.countDocuments()
+  public async getTotalPage(keyword: string): Promise<number> {
+    const query: Filter<Place> = {
+      name: { $regex: keyword }
+    }
+    const total = await this.places.countDocuments(keyword ? query: {})
     return Math.ceil(total / ITEM_PER_PAGE)
   }
 
