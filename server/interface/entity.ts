@@ -1,8 +1,8 @@
 import { Double, Long, ObjectId } from 'mongodb'
 
 export enum TaxPriority {
-  TAX,
-  SERVICE
+  TAX = 'TAX',
+  SERVICE = 'SERVICE'
 }
 
 export interface Place {

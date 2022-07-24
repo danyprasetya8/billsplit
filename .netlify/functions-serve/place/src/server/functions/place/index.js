@@ -26737,8 +26737,8 @@ var import_mongodb = __toESM(require_lib3());
 
 // server/interface/entity.ts
 var TaxPriority = /* @__PURE__ */ ((TaxPriority2) => {
-  TaxPriority2[TaxPriority2["TAX"] = 0] = "TAX";
-  TaxPriority2[TaxPriority2["SERVICE"] = 1] = "SERVICE";
+  TaxPriority2["TAX"] = "TAX";
+  TaxPriority2["SERVICE"] = "SERVICE";
   return TaxPriority2;
 })(TaxPriority || {});
 
