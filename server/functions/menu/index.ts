@@ -14,7 +14,7 @@ const handler: Handler = async function({ httpMethod, queryStringParameters, bod
   } else if (httpMethod === 'PUT') {
     return updateMenu(db, queryStringParameters, body)
   }
-  return deleteMenu(db, queryStringParameters)
+  return deleteMenu(db, body)
 }
 
 export { handler }

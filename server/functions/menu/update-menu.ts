@@ -5,18 +5,14 @@ import MenuRepository from '../../repository/MenuRepository'
 
 interface RequestBody {
   name: string,
-  price: number
-}
-
-interface QueryParameters {
+  price: number,
   menuId: string
 }
 
 const updateMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
   const body: RequestBody = JSON.parse(bodyString || '')
 
-  const { menuId: menuIdString } = queryStringParameters as QueryParameters
-  const menuId = new ObjectId(menuIdString)
+  const menuId = new ObjectId(body.menuId)
 
   const menuRepository = new MenuRepository(db)
   const menu: Partial<Menu> = {

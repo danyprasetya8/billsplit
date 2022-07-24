@@ -2,13 +2,13 @@ import { Db, ObjectId } from 'mongodb'
 import { BaseResponse } from '../../interface/response'
 import MenuRepository from '../../repository/MenuRepository'
 
-interface QueryParameters {
+interface RequestBody {
   menuId: string
 }
 
-const deleteMenu = async (db: Db, queryStringParameters) => {
-  const { menuId: menuIdString } = queryStringParameters as QueryParameters
-  const menuId = new ObjectId(menuIdString)
+const deleteMenu = async (db: Db, bodyString: string | null) => {
+  const body: RequestBody = JSON.parse(bodyString || '')
+  const menuId = new ObjectId(body.menuId)
 
   const menuRepository = new MenuRepository(db)
   const result = await menuRepository.delete(menuId)
