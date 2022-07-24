@@ -14,6 +14,15 @@ import debounce from '@/util/debouncer'
 
 const { page } = constant
 
+const addPlaceBtnStyle = css`
+  text-decoration: none;
+  color: #FFF;
+
+  &:hover {
+    color: #FFF;
+  }
+`
+
 const Container = styled.div`
   width: 100%;
   padding: 0 50px;
@@ -64,65 +73,65 @@ const PlaceList: React.FC = () => {
   }, [keyword]) // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <>
-      <Container>
-        <Header title="PLACES" />
+    <Container>
+      <Header title="PLACES" />
 
-        <div css={`display: flex; justify-content: space-between; align-items: center;`}>
-          <SearchBar>
-            <Search />
-            <input
-              type="text"
-              placeholder="Search place"
-              css={`outline: none; border: none; margin-left: 10px; width: 100%;`}
-              onChange={handleSearch}
-            />
-          </SearchBar>
+      <div css={`display: flex; justify-content: space-between; align-items: center;`}>
+        <SearchBar>
+          <Search />
+          <input
+            type="text"
+            placeholder="Search place"
+            css={`outline: none; border: none; margin-left: 10px; width: 100%;`}
+            onChange={handleSearch}
+          />
+        </SearchBar>
 
           <Button css={`width: 15%;`}>
-            Add Place
+            <Link to={page.createPlace} css={addPlaceBtnStyle}>
+              Add Place
+            </Link>
           </Button>
-        </div>
+      </div>
 
 
-        <div css={`margin-top: 25px;`}>
-          {
-            places?.map(place => (
-              <Card key={place.id} css={`
-                margin-bottom: 10px;
-                cursor: pointer;
-              `}>
-                  <PlaceLink to={page.placeDetail.replace(':placeId', place.id)}>
-                    <Card.Body css={`
-                      display: flex;
-                      align-items: center;
-                      justify-content: space-between;
-                    `}>
-                      {place.name}
-                      <ChevronRight />
-                    </Card.Body>
-                  </PlaceLink>
-              </Card>
-            ))
-          }
-        </div>
+      <div css={`margin-top: 25px;`}>
+        {
+          places?.map(place => (
+            <Card key={place.id} css={`
+              margin-bottom: 10px;
+              cursor: pointer;
+            `}>
+                <PlaceLink to={page.placeDetail.replace(':placeId', place.id)}>
+                  <Card.Body css={`
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                  `}>
+                    {place.name}
+                    <ChevronRight />
+                  </Card.Body>
+                </PlaceLink>
+            </Card>
+          ))
+        }
+      </div>
 
-        <div css={`
-          margin-top: 16px;
-          align-self: end;
-        `}>
-          {
-            !!places.length && pagination?.page && (
-              <Pagination
-                current={pagination.page}
-                totalPage={pagination.totalPage || 0}
-                changePage={fetchPlaces}
-              />
-            )
-          }
-        </div>
-      </Container>
-    </>
+      <div css={`
+        margin-top: 16px;
+        align-self: end;
+      `}>
+        {
+          !!places.length && pagination?.page && (
+            <Pagination
+              current={pagination.page}
+              totalPage={pagination.totalPage || 0}
+              changePage={fetchPlaces}
+            />
+          )
+        }
+      </div>
+    </Container>
   )
 }
 

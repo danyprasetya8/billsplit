@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { BaseResponse, GetMenuWebResponse } from '@/interfaces/response'
 import axios from '@/axios'
 import api from '@/config/api'
@@ -16,12 +16,7 @@ export const getMenus = createAsyncThunk(
 export const menuSlice = createSlice({
   name: 'menu',
   initialState: {},
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(getMenus.fulfilled, (_, actions: PayloadAction<BaseResponse<GetMenuWebResponse[]>>) => {
-      return actions.payload
-    })
-  }
+  reducers: {}
 })
 
 export default menuSlice.reducer

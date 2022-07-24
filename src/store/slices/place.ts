@@ -1,4 +1,4 @@
-import { PayloadAction, createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { BaseResponse, GetPlacesResponse, GetPlaceDetailResponse } from '@/interfaces/response'
 import axios from '@/axios'
 import api from '@/config/api'
@@ -26,18 +26,25 @@ export const getPlaceDetail = createAsyncThunk(
   }
 )
 
+interface SavePlaceRequest {
+  name: string,
+  taxPercentage: number,
+  servicePercentage: number,
+  taxPriority: string
+}
+
+export const savePlace = createAsyncThunk(
+  'places/savePlace',
+  async (requestBody: SavePlaceRequest) => {
+    const response = await axios.post<BaseResponse<boolean>>(api.place, requestBody)
+    return response.data
+  }
+)
+
 export const placeSlice = createSlice({
   name: 'place',
   initialState: {},
-  reducers: {},
-  extraReducers: builder => {
-    builder.addCase(getPlaces.fulfilled, (_, actions: PayloadAction<BaseResponse<GetPlacesResponse[]>>) => {
-      return actions.payload
-    })
-    builder.addCase(getPlaceDetail.fulfilled, (_, actions: PayloadAction<BaseResponse<GetPlaceDetailResponse>>) => {
-      return actions.payload
-    })
-  }
+  reducers: {}
 })
 
 export default placeSlice.reducer

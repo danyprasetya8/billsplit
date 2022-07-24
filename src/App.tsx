@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import CreatePlace from '@/pages/CreatePlace'
 import PlaceDetail from '@/pages/PlaceDetail'
 import PlaceList from '@/pages/PlaceList/PlaceList'
 import BillList from '@/pages/BillList'
@@ -17,6 +18,7 @@ const App: React.FC = () => {
             <Route index element={<PlaceList />} />
             <Route path={page.place} element={<PlaceList />} />
             <Route path={page.placeDetail} element={<PlaceDetail />} />
+            <Route path={page.createPlace} element={<CreatePlace />} />
             <Route path={page.bill} element={<BillList />} />
           </Route>
         </Routes>

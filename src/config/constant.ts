@@ -3,6 +3,7 @@ const constant = {
     base: '/',
     place: '/place',
     placeDetail: '/place/:placeId',
+    createPlace: '/place/create',
     bill: '/bill'
   }
 }

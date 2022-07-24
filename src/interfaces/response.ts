@@ -1,3 +1,5 @@
+import { TaxPriority } from '@/enums'
+
 export interface BaseResponse<T> {
   data: T,
   paging?: {
@@ -10,11 +12,6 @@ export interface BaseResponse<T> {
 export interface GetPlacesResponse {
   id: string
   name: string
-}
-
-enum TaxPriority {
-  TAX,
-  SERVICE
 }
 
 export interface GetPlaceDetailResponse {

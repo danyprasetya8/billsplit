@@ -17,6 +17,12 @@ const Container = styled.div`
   margin: 25px 0;
 `
 
+const menuElementStyle = css`
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`
+
 const PlaceDetail: React.FC = () => {
   const { placeId } = useParams<{ placeId: string }>()
   const dispatch = useAppDispatch()
@@ -45,11 +51,7 @@ const PlaceDetail: React.FC = () => {
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
   const toMenuElement = (menu: GetMenuWebResponse) => (
-    <div key={menu.id} css={`
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-    `}>
+    <div key={menu.id} css={menuElementStyle}>
       <div>
         {menu.name}
       </div>
