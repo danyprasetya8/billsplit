@@ -15,6 +15,7 @@ export interface GetPlacesResponse {
 }
 
 export interface GetPlaceDetailResponse {
+  id: string,
   name: string,
   percentage: {
     tax: number,

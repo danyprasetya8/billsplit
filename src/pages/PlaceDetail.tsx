@@ -2,6 +2,7 @@ import { useAppDispatch } from '@/hooks'
 import { useParams } from 'react-router-dom'
 import { getPlaceDetail } from '@/store/slices/place'
 import { GetPlaceDetailResponse } from '@/interfaces/response'
+import { useNavigate } from 'react-router-dom'
 import React, { useEffect, useState } from 'react'
 import CreateMenu from '@/components/CreateMenu'
 import Button from '@/components/Button'
@@ -21,6 +22,7 @@ const Container = styled.div`
 const PlaceDetail: React.FC = () => {
   const { placeId } = useParams<{ placeId: string }>()
   const dispatch = useAppDispatch()
+  const navigate = useNavigate()
 
   const [placeDetail, setPlaceDetail] = useState<GetPlaceDetailResponse>()
 
@@ -35,6 +37,11 @@ const PlaceDetail: React.FC = () => {
     fetchPlaceDetail()
   }, []) // eslint-disable-line react-hooks/exhaustive-deps
 
+  const toEditPlacePage = () => {
+    if (placeId === undefined) return
+    navigate(page.updatePlace.replace(':placeId', placeId))
+  }
+
   return (
     <Container>
       <Header
@@ -42,7 +49,10 @@ const PlaceDetail: React.FC = () => {
         backUrl={page.place}
       />
 
-      <Button className="w-25">
+      <Button
+        className="w-25"
+        onClick={toEditPlacePage}
+      >
         Edit Place
       </Button>
 

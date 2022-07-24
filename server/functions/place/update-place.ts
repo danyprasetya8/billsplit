@@ -3,22 +3,18 @@ import { Place, TaxPriority } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
 
-interface QueryParameters {
-  placeId: string
-}
-
 interface RequestBody {
+  placeId: string,
   name: string,
   taxPercentage: number,
   servicePercentage: number,
   taxPriority: string
 }
 
-const updatePlace = async (db: Db, queryStringParameters, bodyString: string | null) => {
+const updatePlace = async (db: Db, bodyString: string | null) => {
   const body = JSON.parse(bodyString || '') as RequestBody
 
-  const { placeId: placeIdString } = queryStringParameters as QueryParameters
-  const placeId: ObjectId = new ObjectId(placeIdString)
+  const placeId: ObjectId = new ObjectId(body.placeId)
 
   const placeRepository = new PlaceRepository(db)
 

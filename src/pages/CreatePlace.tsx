@@ -1,15 +1,16 @@
 import * as Yup from 'yup'
 import { numberInput } from '@/util/common'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { TaxPriority } from '@/enums'
-import { savePlace } from '@/store/slices/place'
+import { getPlaceDetail, savePlace, updatePlace } from '@/store/slices/place'
 import { useAppDispatch } from '@/hooks'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Header from '@/components/Header'
 import styled from 'styled-components'
 import constant from '@/config/constant'
+import { GetPlaceDetailResponse } from '@/interfaces/response'
 
 const { page } = constant
 
@@ -41,25 +42,57 @@ const createPlaceSchema = Yup.object()
   })
 
 const CreatePlace: React.FC = () => {
+  const { placeId } = useParams<{ placeId: string | undefined }>()
   const dispatch = useAppDispatch()
   const navigate = useNavigate()
 
-  const initialValues: FormType = {
+  const [placeDetail, setPlaceDetail] = useState<GetPlaceDetailResponse>()
+  const [formInitialValues, setFormInitialValues] = useState<FormType>({
     name: '',
     tax: '',
     service: '',
     taxPriority: TaxPriority.TAX
-  }
+  })
 
-  const addPlace = async (form: FormType): Promise<void> => {
+  useEffect(() => {
+    if (placeDetail?.id) {
+      setFormInitialValues({
+        name: placeDetail.name,
+        tax: placeDetail.percentage.tax.toString(),
+        service: placeDetail.percentage.service.toString(),
+        taxPriority: placeDetail.taxPriority
+      })
+    }
+  }, [placeDetail])
+
+  useEffect(() => {
+    if (placeId === undefined) return
+
+    const fetchPlaceDetail = async (): Promise<void> => {
+      const placeDetail = await dispatch(getPlaceDetail(placeId)).unwrap()
+      setPlaceDetail(placeDetail.data)
+    }
+
+    fetchPlaceDetail()
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const saveOrUpdatePlace = async (form: FormType): Promise<void> => {
     const body = {
       name: form.name,
       taxPercentage: +form.tax,
       servicePercentage: +form.service,
       taxPriority: form.taxPriority.toString()
     }
-    await dispatch(savePlace(body)).unwrap()
 
+    if (!placeId) {
+      await dispatch(savePlace(body))
+    } else {
+      const updateBody = {
+        ...body,
+        placeId
+      }
+      await dispatch(updatePlace(updateBody))
+    }
     navigate(page.place)
   }
 
@@ -73,14 +106,17 @@ const CreatePlace: React.FC = () => {
     }
   }
 
+  const getPageTitle = placeDetail?.id ? 'UPDATE PLACES' : 'ADD PLACES'
+
   return (
     <Container>
-      <Header title="ADD PLACES" />
+      <Header title={getPageTitle} />
 
       <Formik
-        initialValues={initialValues}
+        enableReinitialize
+        initialValues={formInitialValues}
         validationSchema={createPlaceSchema}
-        onSubmit={addPlace}
+        onSubmit={saveOrUpdatePlace}
       >
         <Form onKeyDown={handleFormKeyDown}>
           <div className="d-flex flex-column">

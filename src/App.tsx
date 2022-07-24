@@ -19,6 +19,7 @@ const App: React.FC = () => {
             <Route path={page.place} element={<PlaceList />} />
             <Route path={page.placeDetail} element={<PlaceDetail />} />
             <Route path={page.createPlace} element={<CreatePlace />} />
+            <Route path={page.updatePlace} element={<CreatePlace />} />
             <Route path={page.bill} element={<BillList />} />
           </Route>
         </Routes>

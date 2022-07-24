@@ -10,9 +10,9 @@ const handler: Handler = async function({ httpMethod, queryStringParameters, bod
   if (httpMethod === 'GET') {
     return getMenus(db, queryStringParameters)
   } else if (httpMethod === 'POST') {
-    return saveMenu(db, queryStringParameters, body)
+    return saveMenu(db, body)
   } else if (httpMethod === 'PUT') {
-    return updateMenu(db, queryStringParameters, body)
+    return updateMenu(db, body)
   }
   return deleteMenu(db, body)
 }

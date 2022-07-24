@@ -26767,10 +26767,9 @@ var save_place_default = savePlace;
 
 // server/functions/place/update-place.ts
 var import_mongodb2 = __toESM(require_lib3());
-var updatePlace = async (db, queryStringParameters, bodyString) => {
+var updatePlace = async (db, bodyString) => {
   const body = JSON.parse(bodyString || "");
-  const { placeId: placeIdString } = queryStringParameters;
-  const placeId = new import_mongodb2.ObjectId(placeIdString);
+  const placeId = new import_mongodb2.ObjectId(body.placeId);
   const placeRepository = new PlaceRepository_default(db);
   const place = {
     name: body.name,
@@ -26799,7 +26798,7 @@ var handler = async function({ httpMethod, queryStringParameters, body }) {
   } else if (httpMethod === "POST") {
     return save_place_default(db, body);
   }
-  return update_place_default(db, queryStringParameters, body);
+  return update_place_default(db, body);
 };
 module.exports = __toCommonJS(place_exports);
 // Annotate the CommonJS export names for ESM import in node:

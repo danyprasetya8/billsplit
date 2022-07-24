@@ -9,7 +9,7 @@ interface RequestBody {
   menuId: string
 }
 
-const updateMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
+const updateMenu = async (db: Db, bodyString: string | null) => {
   const body: RequestBody = JSON.parse(bodyString || '')
 
   const menuId = new ObjectId(body.menuId)

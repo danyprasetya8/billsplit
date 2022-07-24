@@ -26710,6 +26710,7 @@ var PlaceRepository_default = PlaceRepository;
 
 // server/functions/place-detail/get-place-detail.ts
 var getPlaceDetail = async (db, queryStringParameters) => {
+  var _a;
   const { placeId } = queryStringParameters;
   const placeRepository = new PlaceRepository_default(db);
   const placeIdObject = new mongodb.ObjectId(placeId);
@@ -26722,6 +26723,7 @@ var getPlaceDetail = async (db, queryStringParameters) => {
   }
   const placeResponse = {
     data: {
+      id: ((_a = place._id) == null ? void 0 : _a.toString()) || "",
       name: place.name,
       percentage: {
         tax: +place.percentage.tax,

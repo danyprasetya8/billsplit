@@ -26748,7 +26748,7 @@ var get_menus_default = getMenus;
 
 // server/functions/menu/save-menu.ts
 var import_mongodb3 = __toESM(require_lib3());
-var saveMenu = async (db, queryStringParameters, bodyString) => {
+var saveMenu = async (db, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const placeId = new import_mongodb3.ObjectId(body.placeId);
   const menuRepository = new MenuRepository_default(db);
@@ -26770,7 +26770,7 @@ var save_menu_default = saveMenu;
 
 // server/functions/menu/update-menu.ts
 var import_mongodb4 = __toESM(require_lib3());
-var updateMenu = async (db, queryStringParameters, bodyString) => {
+var updateMenu = async (db, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const menuId = new import_mongodb4.ObjectId(body.menuId);
   const menuRepository = new MenuRepository_default(db);
@@ -26795,9 +26795,9 @@ var handler = async function({ httpMethod, queryStringParameters, body }) {
   if (httpMethod === "GET") {
     return get_menus_default(db, queryStringParameters);
   } else if (httpMethod === "POST") {
-    return save_menu_default(db, queryStringParameters, body);
+    return save_menu_default(db, body);
   } else if (httpMethod === "PUT") {
-    return update_menu_default(db, queryStringParameters, body);
+    return update_menu_default(db, body);
   }
   return delete_menu_default(db, body);
 };

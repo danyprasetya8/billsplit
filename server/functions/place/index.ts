@@ -11,7 +11,7 @@ const handler: Handler = async function({ httpMethod, queryStringParameters, bod
   } else if (httpMethod === 'POST') {
     return savePlace(db, body)
   }
-  return updatePlace(db, queryStringParameters, body)
+  return updatePlace(db, body)
 }
 
 export { handler }

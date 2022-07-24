@@ -4,6 +4,7 @@ import { BaseResponse } from '../../interface/response'
 import PlaceRepository from '../../repository/PlaceRepository'
 
 interface GetPlaceDetailResponse {
+  id: string,
   name: string,
   percentage: {
     tax: number,
@@ -33,6 +34,7 @@ const getPlaceDetail = async (db: mongodb.Db, queryStringParameters) => {
 
   const placeResponse: BaseResponse<GetPlaceDetailResponse> = {
     data: {
+      id: place._id?.toString() || '',
       name: place.name,
       percentage: {
         tax: +place.percentage.tax,

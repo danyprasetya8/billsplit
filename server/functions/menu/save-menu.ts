@@ -9,7 +9,7 @@ interface RequestBody {
   placeId: string
 }
 
-const saveMenu = async (db: Db, queryStringParameters, bodyString: string | null) => {
+const saveMenu = async (db: Db, bodyString: string | null) => {
   const body: RequestBody = JSON.parse(bodyString || '')
 
   const placeId = new ObjectId(body.placeId)

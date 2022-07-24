@@ -41,6 +41,18 @@ export const savePlace = createAsyncThunk(
   }
 )
 
+interface UpdatePlaceRquest extends SavePlaceRequest {
+  placeId: string
+}
+
+export const updatePlace = createAsyncThunk(
+  'places/updatePlace',
+  async (requestBody: UpdatePlaceRquest) => {
+    const response = await axios.put<BaseResponse<boolean>>(api.place, requestBody)
+    return response.data
+  }
+)
+
 export const placeSlice = createSlice({
   name: 'place',
   initialState: {},
