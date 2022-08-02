@@ -8,6 +8,7 @@ const Button: React.FC<ButtonProps> = props => {
         {`
           .btn-primary-d {
             background-color: #00ADB5;
+            border: 1px solid #00ADB5;
             color: #FFF;
             padding: 10px 0;
             transition: background-color .2s ease;
@@ -15,6 +16,16 @@ const Button: React.FC<ButtonProps> = props => {
           .btn-primary-d:hover {
             color: #FFF;
             background-color: #009FA7;
+          }
+          .btn-primary-outline-d {
+            background-color: #FFF;
+            border: 1px solid #00ADB5;
+            color: #00ADB5;
+            padding: 10px 0;
+          }
+          .btn-primary-outline-d:hover {
+            color: #00ADB5;
+            background-color: #FFF;
           }
         `}
       </style>

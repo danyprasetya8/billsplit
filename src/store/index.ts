@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import placeReducer from './slices/place'
 import menuReducer from './slices/menu'
+import toastReducer from './slices/toast'
 
 const store = configureStore({
   reducer: {
     place: placeReducer,
-    menu: menuReducer
+    menu: menuReducer,
+    toast: toastReducer
   }
 })
 

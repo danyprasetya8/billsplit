@@ -50,19 +50,13 @@ const CreateMenu: React.FC<Props> = props => {
     })
   }
 
-  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  }
-
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={addMenu}
     >
-      <Form onKeyDown={handleFormKeyDown}>
+      <Form>
         <div className="d-flex">
           <div>
             <Field

@@ -42,6 +42,20 @@ export const saveMenu = createAsyncThunk(
   }
 )
 
+interface UpdateMenuRequest {
+  name: string,
+  price: number,
+  menuId: string
+}
+
+export const updateMenu = createAsyncThunk(
+  'menus/updateMenu',
+  async (requestBody: UpdateMenuRequest) => {
+    const response = await axios.put<BaseResponse<boolean>>(api.menu, requestBody)
+    return response.data
+  }
+)
+
 interface InitialState {
   menus: GetMenuWebResponse[]
 }

@@ -100,12 +100,6 @@ const CreatePlace: React.FC = () => {
     navigate(page.place)
   }
 
-  const handleFormKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-    }
-  }
-
   const getPageTitle = placeDetail?.id ? 'UPDATE PLACES' : 'ADD PLACES'
 
   return (
@@ -118,7 +112,7 @@ const CreatePlace: React.FC = () => {
         validationSchema={createPlaceSchema}
         onSubmit={saveOrUpdatePlace}
       >
-        <Form onKeyDown={handleFormKeyDown}>
+        <Form>
           <div className="d-flex flex-column">
             <div className="mb-1">
               Place name
