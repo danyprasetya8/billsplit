@@ -29,3 +29,9 @@ export interface GetMenuWebResponse {
   name: string,
   price: number
 }
+
+export interface GetBillsResponse {
+  id: string,
+  placeName: string | null,
+  date: number
+}

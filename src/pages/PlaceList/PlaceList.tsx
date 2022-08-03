@@ -87,11 +87,11 @@ const PlaceList: React.FC = () => {
           />
         </SearchBar>
 
-          <Button css={`width: 15%;`}>
-            <Link to={page.createPlace} css={addPlaceBtnStyle}>
-              Add Place
-            </Link>
-          </Button>
+        <Button css={`width: 15%;`}>
+          <Link to={page.createPlace} css={addPlaceBtnStyle}>
+            Add Place
+          </Link>
+        </Button>
       </div>
 
 
