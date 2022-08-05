@@ -1242,17 +1242,17 @@ var require_long = __commonJS({
     var TWO_PWR_63_DBL = TWO_PWR_64_DBL / 2;
     var INT_CACHE = {};
     var UINT_CACHE = {};
-    var Long4 = function() {
-      function Long5(low, high, unsigned) {
+    var Long3 = function() {
+      function Long4(low, high, unsigned) {
         if (low === void 0) {
           low = 0;
         }
-        if (!(this instanceof Long5))
-          return new Long5(low, high, unsigned);
+        if (!(this instanceof Long4))
+          return new Long4(low, high, unsigned);
         if (typeof low === "bigint") {
-          Object.assign(this, Long5.fromBigInt(low, !!high));
+          Object.assign(this, Long4.fromBigInt(low, !!high));
         } else if (typeof low === "string") {
-          Object.assign(this, Long5.fromString(low, !!high));
+          Object.assign(this, Long4.fromString(low, !!high));
         } else {
           this.low = low | 0;
           this.high = high | 0;
@@ -1265,10 +1265,10 @@ var require_long = __commonJS({
           enumerable: false
         });
       }
-      Long5.fromBits = function(lowBits, highBits, unsigned) {
-        return new Long5(lowBits, highBits, unsigned);
+      Long4.fromBits = function(lowBits, highBits, unsigned) {
+        return new Long4(lowBits, highBits, unsigned);
       };
-      Long5.fromInt = function(value, unsigned) {
+      Long4.fromInt = function(value, unsigned) {
         var obj, cachedObj, cache;
         if (unsigned) {
           value >>>= 0;
@@ -1277,7 +1277,7 @@ var require_long = __commonJS({
             if (cachedObj)
               return cachedObj;
           }
-          obj = Long5.fromBits(value, (value | 0) < 0 ? -1 : 0, true);
+          obj = Long4.fromBits(value, (value | 0) < 0 ? -1 : 0, true);
           if (cache)
             UINT_CACHE[value] = obj;
           return obj;
@@ -1288,38 +1288,38 @@ var require_long = __commonJS({
             if (cachedObj)
               return cachedObj;
           }
-          obj = Long5.fromBits(value, value < 0 ? -1 : 0, false);
+          obj = Long4.fromBits(value, value < 0 ? -1 : 0, false);
           if (cache)
             INT_CACHE[value] = obj;
           return obj;
         }
       };
-      Long5.fromNumber = function(value, unsigned) {
+      Long4.fromNumber = function(value, unsigned) {
         if (isNaN(value))
-          return unsigned ? Long5.UZERO : Long5.ZERO;
+          return unsigned ? Long4.UZERO : Long4.ZERO;
         if (unsigned) {
           if (value < 0)
-            return Long5.UZERO;
+            return Long4.UZERO;
           if (value >= TWO_PWR_64_DBL)
-            return Long5.MAX_UNSIGNED_VALUE;
+            return Long4.MAX_UNSIGNED_VALUE;
         } else {
           if (value <= -TWO_PWR_63_DBL)
-            return Long5.MIN_VALUE;
+            return Long4.MIN_VALUE;
           if (value + 1 >= TWO_PWR_63_DBL)
-            return Long5.MAX_VALUE;
+            return Long4.MAX_VALUE;
         }
         if (value < 0)
-          return Long5.fromNumber(-value, unsigned).neg();
-        return Long5.fromBits(value % TWO_PWR_32_DBL | 0, value / TWO_PWR_32_DBL | 0, unsigned);
+          return Long4.fromNumber(-value, unsigned).neg();
+        return Long4.fromBits(value % TWO_PWR_32_DBL | 0, value / TWO_PWR_32_DBL | 0, unsigned);
       };
-      Long5.fromBigInt = function(value, unsigned) {
-        return Long5.fromString(value.toString(), unsigned);
+      Long4.fromBigInt = function(value, unsigned) {
+        return Long4.fromString(value.toString(), unsigned);
       };
-      Long5.fromString = function(str, unsigned, radix) {
+      Long4.fromString = function(str, unsigned, radix) {
         if (str.length === 0)
           throw Error("empty string");
         if (str === "NaN" || str === "Infinity" || str === "+Infinity" || str === "-Infinity")
-          return Long5.ZERO;
+          return Long4.ZERO;
         if (typeof unsigned === "number") {
           radix = unsigned, unsigned = false;
         } else {
@@ -1332,45 +1332,45 @@ var require_long = __commonJS({
         if ((p = str.indexOf("-")) > 0)
           throw Error("interior hyphen");
         else if (p === 0) {
-          return Long5.fromString(str.substring(1), unsigned, radix).neg();
+          return Long4.fromString(str.substring(1), unsigned, radix).neg();
         }
-        var radixToPower = Long5.fromNumber(Math.pow(radix, 8));
-        var result = Long5.ZERO;
+        var radixToPower = Long4.fromNumber(Math.pow(radix, 8));
+        var result = Long4.ZERO;
         for (var i = 0; i < str.length; i += 8) {
           var size = Math.min(8, str.length - i), value = parseInt(str.substring(i, i + size), radix);
           if (size < 8) {
-            var power = Long5.fromNumber(Math.pow(radix, size));
-            result = result.mul(power).add(Long5.fromNumber(value));
+            var power = Long4.fromNumber(Math.pow(radix, size));
+            result = result.mul(power).add(Long4.fromNumber(value));
           } else {
             result = result.mul(radixToPower);
-            result = result.add(Long5.fromNumber(value));
+            result = result.add(Long4.fromNumber(value));
           }
         }
         result.unsigned = unsigned;
         return result;
       };
-      Long5.fromBytes = function(bytes, unsigned, le) {
-        return le ? Long5.fromBytesLE(bytes, unsigned) : Long5.fromBytesBE(bytes, unsigned);
+      Long4.fromBytes = function(bytes, unsigned, le) {
+        return le ? Long4.fromBytesLE(bytes, unsigned) : Long4.fromBytesBE(bytes, unsigned);
       };
-      Long5.fromBytesLE = function(bytes, unsigned) {
-        return new Long5(bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24, bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24, unsigned);
+      Long4.fromBytesLE = function(bytes, unsigned) {
+        return new Long4(bytes[0] | bytes[1] << 8 | bytes[2] << 16 | bytes[3] << 24, bytes[4] | bytes[5] << 8 | bytes[6] << 16 | bytes[7] << 24, unsigned);
       };
-      Long5.fromBytesBE = function(bytes, unsigned) {
-        return new Long5(bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7], bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], unsigned);
+      Long4.fromBytesBE = function(bytes, unsigned) {
+        return new Long4(bytes[4] << 24 | bytes[5] << 16 | bytes[6] << 8 | bytes[7], bytes[0] << 24 | bytes[1] << 16 | bytes[2] << 8 | bytes[3], unsigned);
       };
-      Long5.isLong = function(value) {
+      Long4.isLong = function(value) {
         return utils_1.isObjectLike(value) && value["__isLong__"] === true;
       };
-      Long5.fromValue = function(val, unsigned) {
+      Long4.fromValue = function(val, unsigned) {
         if (typeof val === "number")
-          return Long5.fromNumber(val, unsigned);
+          return Long4.fromNumber(val, unsigned);
         if (typeof val === "string")
-          return Long5.fromString(val, unsigned);
-        return Long5.fromBits(val.low, val.high, typeof unsigned === "boolean" ? unsigned : val.unsigned);
+          return Long4.fromString(val, unsigned);
+        return Long4.fromBits(val.low, val.high, typeof unsigned === "boolean" ? unsigned : val.unsigned);
       };
-      Long5.prototype.add = function(addend) {
-        if (!Long5.isLong(addend))
-          addend = Long5.fromValue(addend);
+      Long4.prototype.add = function(addend) {
+        if (!Long4.isLong(addend))
+          addend = Long4.fromValue(addend);
         var a48 = this.high >>> 16;
         var a32 = this.high & 65535;
         var a16 = this.low >>> 16;
@@ -1391,16 +1391,16 @@ var require_long = __commonJS({
         c32 &= 65535;
         c48 += a48 + b48;
         c48 &= 65535;
-        return Long5.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+        return Long4.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
       };
-      Long5.prototype.and = function(other) {
-        if (!Long5.isLong(other))
-          other = Long5.fromValue(other);
-        return Long5.fromBits(this.low & other.low, this.high & other.high, this.unsigned);
+      Long4.prototype.and = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low & other.low, this.high & other.high, this.unsigned);
       };
-      Long5.prototype.compare = function(other) {
-        if (!Long5.isLong(other))
-          other = Long5.fromValue(other);
+      Long4.prototype.compare = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
         if (this.eq(other))
           return 0;
         var thisNeg = this.isNegative(), otherNeg = other.isNegative();
@@ -1412,12 +1412,12 @@ var require_long = __commonJS({
           return this.sub(other).isNegative() ? -1 : 1;
         return other.high >>> 0 > this.high >>> 0 || other.high === this.high && other.low >>> 0 > this.low >>> 0 ? -1 : 1;
       };
-      Long5.prototype.comp = function(other) {
+      Long4.prototype.comp = function(other) {
         return this.compare(other);
       };
-      Long5.prototype.divide = function(divisor) {
-        if (!Long5.isLong(divisor))
-          divisor = Long5.fromValue(divisor);
+      Long4.prototype.divide = function(divisor) {
+        if (!Long4.isLong(divisor))
+          divisor = Long4.fromValue(divisor);
         if (divisor.isZero())
           throw Error("division by zero");
         if (wasm) {
@@ -1425,93 +1425,93 @@ var require_long = __commonJS({
             return this;
           }
           var low = (this.unsigned ? wasm.div_u : wasm.div_s)(this.low, this.high, divisor.low, divisor.high);
-          return Long5.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         if (this.isZero())
-          return this.unsigned ? Long5.UZERO : Long5.ZERO;
+          return this.unsigned ? Long4.UZERO : Long4.ZERO;
         var approx, rem, res;
         if (!this.unsigned) {
-          if (this.eq(Long5.MIN_VALUE)) {
-            if (divisor.eq(Long5.ONE) || divisor.eq(Long5.NEG_ONE))
-              return Long5.MIN_VALUE;
-            else if (divisor.eq(Long5.MIN_VALUE))
-              return Long5.ONE;
+          if (this.eq(Long4.MIN_VALUE)) {
+            if (divisor.eq(Long4.ONE) || divisor.eq(Long4.NEG_ONE))
+              return Long4.MIN_VALUE;
+            else if (divisor.eq(Long4.MIN_VALUE))
+              return Long4.ONE;
             else {
               var halfThis = this.shr(1);
               approx = halfThis.div(divisor).shl(1);
-              if (approx.eq(Long5.ZERO)) {
-                return divisor.isNegative() ? Long5.ONE : Long5.NEG_ONE;
+              if (approx.eq(Long4.ZERO)) {
+                return divisor.isNegative() ? Long4.ONE : Long4.NEG_ONE;
               } else {
                 rem = this.sub(divisor.mul(approx));
                 res = approx.add(rem.div(divisor));
                 return res;
               }
             }
-          } else if (divisor.eq(Long5.MIN_VALUE))
-            return this.unsigned ? Long5.UZERO : Long5.ZERO;
+          } else if (divisor.eq(Long4.MIN_VALUE))
+            return this.unsigned ? Long4.UZERO : Long4.ZERO;
           if (this.isNegative()) {
             if (divisor.isNegative())
               return this.neg().div(divisor.neg());
             return this.neg().div(divisor).neg();
           } else if (divisor.isNegative())
             return this.div(divisor.neg()).neg();
-          res = Long5.ZERO;
+          res = Long4.ZERO;
         } else {
           if (!divisor.unsigned)
             divisor = divisor.toUnsigned();
           if (divisor.gt(this))
-            return Long5.UZERO;
+            return Long4.UZERO;
           if (divisor.gt(this.shru(1)))
-            return Long5.UONE;
-          res = Long5.UZERO;
+            return Long4.UONE;
+          res = Long4.UZERO;
         }
         rem = this;
         while (rem.gte(divisor)) {
           approx = Math.max(1, Math.floor(rem.toNumber() / divisor.toNumber()));
           var log2 = Math.ceil(Math.log(approx) / Math.LN2);
           var delta = log2 <= 48 ? 1 : Math.pow(2, log2 - 48);
-          var approxRes = Long5.fromNumber(approx);
+          var approxRes = Long4.fromNumber(approx);
           var approxRem = approxRes.mul(divisor);
           while (approxRem.isNegative() || approxRem.gt(rem)) {
             approx -= delta;
-            approxRes = Long5.fromNumber(approx, this.unsigned);
+            approxRes = Long4.fromNumber(approx, this.unsigned);
             approxRem = approxRes.mul(divisor);
           }
           if (approxRes.isZero())
-            approxRes = Long5.ONE;
+            approxRes = Long4.ONE;
           res = res.add(approxRes);
           rem = rem.sub(approxRem);
         }
         return res;
       };
-      Long5.prototype.div = function(divisor) {
+      Long4.prototype.div = function(divisor) {
         return this.divide(divisor);
       };
-      Long5.prototype.equals = function(other) {
-        if (!Long5.isLong(other))
-          other = Long5.fromValue(other);
+      Long4.prototype.equals = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
         if (this.unsigned !== other.unsigned && this.high >>> 31 === 1 && other.high >>> 31 === 1)
           return false;
         return this.high === other.high && this.low === other.low;
       };
-      Long5.prototype.eq = function(other) {
+      Long4.prototype.eq = function(other) {
         return this.equals(other);
       };
-      Long5.prototype.getHighBits = function() {
+      Long4.prototype.getHighBits = function() {
         return this.high;
       };
-      Long5.prototype.getHighBitsUnsigned = function() {
+      Long4.prototype.getHighBitsUnsigned = function() {
         return this.high >>> 0;
       };
-      Long5.prototype.getLowBits = function() {
+      Long4.prototype.getLowBits = function() {
         return this.low;
       };
-      Long5.prototype.getLowBitsUnsigned = function() {
+      Long4.prototype.getLowBitsUnsigned = function() {
         return this.low >>> 0;
       };
-      Long5.prototype.getNumBitsAbs = function() {
+      Long4.prototype.getNumBitsAbs = function() {
         if (this.isNegative()) {
-          return this.eq(Long5.MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
+          return this.eq(Long4.MIN_VALUE) ? 64 : this.neg().getNumBitsAbs();
         }
         var val = this.high !== 0 ? this.high : this.low;
         var bit;
@@ -1520,78 +1520,78 @@ var require_long = __commonJS({
             break;
         return this.high !== 0 ? bit + 33 : bit + 1;
       };
-      Long5.prototype.greaterThan = function(other) {
+      Long4.prototype.greaterThan = function(other) {
         return this.comp(other) > 0;
       };
-      Long5.prototype.gt = function(other) {
+      Long4.prototype.gt = function(other) {
         return this.greaterThan(other);
       };
-      Long5.prototype.greaterThanOrEqual = function(other) {
+      Long4.prototype.greaterThanOrEqual = function(other) {
         return this.comp(other) >= 0;
       };
-      Long5.prototype.gte = function(other) {
+      Long4.prototype.gte = function(other) {
         return this.greaterThanOrEqual(other);
       };
-      Long5.prototype.ge = function(other) {
+      Long4.prototype.ge = function(other) {
         return this.greaterThanOrEqual(other);
       };
-      Long5.prototype.isEven = function() {
+      Long4.prototype.isEven = function() {
         return (this.low & 1) === 0;
       };
-      Long5.prototype.isNegative = function() {
+      Long4.prototype.isNegative = function() {
         return !this.unsigned && this.high < 0;
       };
-      Long5.prototype.isOdd = function() {
+      Long4.prototype.isOdd = function() {
         return (this.low & 1) === 1;
       };
-      Long5.prototype.isPositive = function() {
+      Long4.prototype.isPositive = function() {
         return this.unsigned || this.high >= 0;
       };
-      Long5.prototype.isZero = function() {
+      Long4.prototype.isZero = function() {
         return this.high === 0 && this.low === 0;
       };
-      Long5.prototype.lessThan = function(other) {
+      Long4.prototype.lessThan = function(other) {
         return this.comp(other) < 0;
       };
-      Long5.prototype.lt = function(other) {
+      Long4.prototype.lt = function(other) {
         return this.lessThan(other);
       };
-      Long5.prototype.lessThanOrEqual = function(other) {
+      Long4.prototype.lessThanOrEqual = function(other) {
         return this.comp(other) <= 0;
       };
-      Long5.prototype.lte = function(other) {
+      Long4.prototype.lte = function(other) {
         return this.lessThanOrEqual(other);
       };
-      Long5.prototype.modulo = function(divisor) {
-        if (!Long5.isLong(divisor))
-          divisor = Long5.fromValue(divisor);
+      Long4.prototype.modulo = function(divisor) {
+        if (!Long4.isLong(divisor))
+          divisor = Long4.fromValue(divisor);
         if (wasm) {
           var low = (this.unsigned ? wasm.rem_u : wasm.rem_s)(this.low, this.high, divisor.low, divisor.high);
-          return Long5.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         return this.sub(this.div(divisor).mul(divisor));
       };
-      Long5.prototype.mod = function(divisor) {
+      Long4.prototype.mod = function(divisor) {
         return this.modulo(divisor);
       };
-      Long5.prototype.rem = function(divisor) {
+      Long4.prototype.rem = function(divisor) {
         return this.modulo(divisor);
       };
-      Long5.prototype.multiply = function(multiplier) {
+      Long4.prototype.multiply = function(multiplier) {
         if (this.isZero())
-          return Long5.ZERO;
-        if (!Long5.isLong(multiplier))
-          multiplier = Long5.fromValue(multiplier);
+          return Long4.ZERO;
+        if (!Long4.isLong(multiplier))
+          multiplier = Long4.fromValue(multiplier);
         if (wasm) {
           var low = wasm.mul(this.low, this.high, multiplier.low, multiplier.high);
-          return Long5.fromBits(low, wasm.get_high(), this.unsigned);
+          return Long4.fromBits(low, wasm.get_high(), this.unsigned);
         }
         if (multiplier.isZero())
-          return Long5.ZERO;
-        if (this.eq(Long5.MIN_VALUE))
-          return multiplier.isOdd() ? Long5.MIN_VALUE : Long5.ZERO;
-        if (multiplier.eq(Long5.MIN_VALUE))
-          return this.isOdd() ? Long5.MIN_VALUE : Long5.ZERO;
+          return Long4.ZERO;
+        if (this.eq(Long4.MIN_VALUE))
+          return multiplier.isOdd() ? Long4.MIN_VALUE : Long4.ZERO;
+        if (multiplier.eq(Long4.MIN_VALUE))
+          return this.isOdd() ? Long4.MIN_VALUE : Long4.ZERO;
         if (this.isNegative()) {
           if (multiplier.isNegative())
             return this.neg().mul(multiplier.neg());
@@ -1599,8 +1599,8 @@ var require_long = __commonJS({
             return this.neg().mul(multiplier).neg();
         } else if (multiplier.isNegative())
           return this.mul(multiplier.neg()).neg();
-        if (this.lt(Long5.TWO_PWR_24) && multiplier.lt(Long5.TWO_PWR_24))
-          return Long5.fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
+        if (this.lt(Long4.TWO_PWR_24) && multiplier.lt(Long4.TWO_PWR_24))
+          return Long4.fromNumber(this.toNumber() * multiplier.toNumber(), this.unsigned);
         var a48 = this.high >>> 16;
         var a32 = this.high & 65535;
         var a16 = this.low >>> 16;
@@ -1630,64 +1630,64 @@ var require_long = __commonJS({
         c32 &= 65535;
         c48 += a48 * b00 + a32 * b16 + a16 * b32 + a00 * b48;
         c48 &= 65535;
-        return Long5.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
+        return Long4.fromBits(c16 << 16 | c00, c48 << 16 | c32, this.unsigned);
       };
-      Long5.prototype.mul = function(multiplier) {
+      Long4.prototype.mul = function(multiplier) {
         return this.multiply(multiplier);
       };
-      Long5.prototype.negate = function() {
-        if (!this.unsigned && this.eq(Long5.MIN_VALUE))
-          return Long5.MIN_VALUE;
-        return this.not().add(Long5.ONE);
+      Long4.prototype.negate = function() {
+        if (!this.unsigned && this.eq(Long4.MIN_VALUE))
+          return Long4.MIN_VALUE;
+        return this.not().add(Long4.ONE);
       };
-      Long5.prototype.neg = function() {
+      Long4.prototype.neg = function() {
         return this.negate();
       };
-      Long5.prototype.not = function() {
-        return Long5.fromBits(~this.low, ~this.high, this.unsigned);
+      Long4.prototype.not = function() {
+        return Long4.fromBits(~this.low, ~this.high, this.unsigned);
       };
-      Long5.prototype.notEquals = function(other) {
+      Long4.prototype.notEquals = function(other) {
         return !this.equals(other);
       };
-      Long5.prototype.neq = function(other) {
+      Long4.prototype.neq = function(other) {
         return this.notEquals(other);
       };
-      Long5.prototype.ne = function(other) {
+      Long4.prototype.ne = function(other) {
         return this.notEquals(other);
       };
-      Long5.prototype.or = function(other) {
-        if (!Long5.isLong(other))
-          other = Long5.fromValue(other);
-        return Long5.fromBits(this.low | other.low, this.high | other.high, this.unsigned);
+      Long4.prototype.or = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low | other.low, this.high | other.high, this.unsigned);
       };
-      Long5.prototype.shiftLeft = function(numBits) {
-        if (Long5.isLong(numBits))
+      Long4.prototype.shiftLeft = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         if ((numBits &= 63) === 0)
           return this;
         else if (numBits < 32)
-          return Long5.fromBits(this.low << numBits, this.high << numBits | this.low >>> 32 - numBits, this.unsigned);
+          return Long4.fromBits(this.low << numBits, this.high << numBits | this.low >>> 32 - numBits, this.unsigned);
         else
-          return Long5.fromBits(0, this.low << numBits - 32, this.unsigned);
+          return Long4.fromBits(0, this.low << numBits - 32, this.unsigned);
       };
-      Long5.prototype.shl = function(numBits) {
+      Long4.prototype.shl = function(numBits) {
         return this.shiftLeft(numBits);
       };
-      Long5.prototype.shiftRight = function(numBits) {
-        if (Long5.isLong(numBits))
+      Long4.prototype.shiftRight = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         if ((numBits &= 63) === 0)
           return this;
         else if (numBits < 32)
-          return Long5.fromBits(this.low >>> numBits | this.high << 32 - numBits, this.high >> numBits, this.unsigned);
+          return Long4.fromBits(this.low >>> numBits | this.high << 32 - numBits, this.high >> numBits, this.unsigned);
         else
-          return Long5.fromBits(this.high >> numBits - 32, this.high >= 0 ? 0 : -1, this.unsigned);
+          return Long4.fromBits(this.high >> numBits - 32, this.high >= 0 ? 0 : -1, this.unsigned);
       };
-      Long5.prototype.shr = function(numBits) {
+      Long4.prototype.shr = function(numBits) {
         return this.shiftRight(numBits);
       };
-      Long5.prototype.shiftRightUnsigned = function(numBits) {
-        if (Long5.isLong(numBits))
+      Long4.prototype.shiftRightUnsigned = function(numBits) {
+        if (Long4.isLong(numBits))
           numBits = numBits.toInt();
         numBits &= 63;
         if (numBits === 0)
@@ -1696,42 +1696,42 @@ var require_long = __commonJS({
           var high = this.high;
           if (numBits < 32) {
             var low = this.low;
-            return Long5.fromBits(low >>> numBits | high << 32 - numBits, high >>> numBits, this.unsigned);
+            return Long4.fromBits(low >>> numBits | high << 32 - numBits, high >>> numBits, this.unsigned);
           } else if (numBits === 32)
-            return Long5.fromBits(high, 0, this.unsigned);
+            return Long4.fromBits(high, 0, this.unsigned);
           else
-            return Long5.fromBits(high >>> numBits - 32, 0, this.unsigned);
+            return Long4.fromBits(high >>> numBits - 32, 0, this.unsigned);
         }
       };
-      Long5.prototype.shr_u = function(numBits) {
+      Long4.prototype.shr_u = function(numBits) {
         return this.shiftRightUnsigned(numBits);
       };
-      Long5.prototype.shru = function(numBits) {
+      Long4.prototype.shru = function(numBits) {
         return this.shiftRightUnsigned(numBits);
       };
-      Long5.prototype.subtract = function(subtrahend) {
-        if (!Long5.isLong(subtrahend))
-          subtrahend = Long5.fromValue(subtrahend);
+      Long4.prototype.subtract = function(subtrahend) {
+        if (!Long4.isLong(subtrahend))
+          subtrahend = Long4.fromValue(subtrahend);
         return this.add(subtrahend.neg());
       };
-      Long5.prototype.sub = function(subtrahend) {
+      Long4.prototype.sub = function(subtrahend) {
         return this.subtract(subtrahend);
       };
-      Long5.prototype.toInt = function() {
+      Long4.prototype.toInt = function() {
         return this.unsigned ? this.low >>> 0 : this.low;
       };
-      Long5.prototype.toNumber = function() {
+      Long4.prototype.toNumber = function() {
         if (this.unsigned)
           return (this.high >>> 0) * TWO_PWR_32_DBL + (this.low >>> 0);
         return this.high * TWO_PWR_32_DBL + (this.low >>> 0);
       };
-      Long5.prototype.toBigInt = function() {
+      Long4.prototype.toBigInt = function() {
         return BigInt(this.toString());
       };
-      Long5.prototype.toBytes = function(le) {
+      Long4.prototype.toBytes = function(le) {
         return le ? this.toBytesLE() : this.toBytesBE();
       };
-      Long5.prototype.toBytesLE = function() {
+      Long4.prototype.toBytesLE = function() {
         var hi = this.high, lo = this.low;
         return [
           lo & 255,
@@ -1744,7 +1744,7 @@ var require_long = __commonJS({
           hi >>> 24
         ];
       };
-      Long5.prototype.toBytesBE = function() {
+      Long4.prototype.toBytesBE = function() {
         var hi = this.high, lo = this.low;
         return [
           hi >>> 24,
@@ -1757,25 +1757,25 @@ var require_long = __commonJS({
           lo & 255
         ];
       };
-      Long5.prototype.toSigned = function() {
+      Long4.prototype.toSigned = function() {
         if (!this.unsigned)
           return this;
-        return Long5.fromBits(this.low, this.high, false);
+        return Long4.fromBits(this.low, this.high, false);
       };
-      Long5.prototype.toString = function(radix) {
+      Long4.prototype.toString = function(radix) {
         radix = radix || 10;
         if (radix < 2 || 36 < radix)
           throw RangeError("radix");
         if (this.isZero())
           return "0";
         if (this.isNegative()) {
-          if (this.eq(Long5.MIN_VALUE)) {
-            var radixLong = Long5.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
+          if (this.eq(Long4.MIN_VALUE)) {
+            var radixLong = Long4.fromNumber(radix), div = this.div(radixLong), rem1 = div.mul(radixLong).sub(this);
             return div.toString(radix) + rem1.toInt().toString(radix);
           } else
             return "-" + this.neg().toString(radix);
         }
-        var radixToPower = Long5.fromNumber(Math.pow(radix, 6), this.unsigned);
+        var radixToPower = Long4.fromNumber(Math.pow(radix, 6), this.unsigned);
         var rem = this;
         var result = "";
         while (true) {
@@ -1792,51 +1792,51 @@ var require_long = __commonJS({
           }
         }
       };
-      Long5.prototype.toUnsigned = function() {
+      Long4.prototype.toUnsigned = function() {
         if (this.unsigned)
           return this;
-        return Long5.fromBits(this.low, this.high, true);
+        return Long4.fromBits(this.low, this.high, true);
       };
-      Long5.prototype.xor = function(other) {
-        if (!Long5.isLong(other))
-          other = Long5.fromValue(other);
-        return Long5.fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
+      Long4.prototype.xor = function(other) {
+        if (!Long4.isLong(other))
+          other = Long4.fromValue(other);
+        return Long4.fromBits(this.low ^ other.low, this.high ^ other.high, this.unsigned);
       };
-      Long5.prototype.eqz = function() {
+      Long4.prototype.eqz = function() {
         return this.isZero();
       };
-      Long5.prototype.le = function(other) {
+      Long4.prototype.le = function(other) {
         return this.lessThanOrEqual(other);
       };
-      Long5.prototype.toExtendedJSON = function(options) {
+      Long4.prototype.toExtendedJSON = function(options) {
         if (options && options.relaxed)
           return this.toNumber();
         return { $numberLong: this.toString() };
       };
-      Long5.fromExtendedJSON = function(doc, options) {
-        var result = Long5.fromString(doc.$numberLong);
+      Long4.fromExtendedJSON = function(doc, options) {
+        var result = Long4.fromString(doc.$numberLong);
         return options && options.relaxed ? result.toNumber() : result;
       };
-      Long5.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      Long4.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      Long5.prototype.inspect = function() {
+      Long4.prototype.inspect = function() {
         return 'new Long("' + this.toString() + '"' + (this.unsigned ? ", true" : "") + ")";
       };
-      Long5.TWO_PWR_24 = Long5.fromInt(TWO_PWR_24_DBL);
-      Long5.MAX_UNSIGNED_VALUE = Long5.fromBits(4294967295 | 0, 4294967295 | 0, true);
-      Long5.ZERO = Long5.fromInt(0);
-      Long5.UZERO = Long5.fromInt(0, true);
-      Long5.ONE = Long5.fromInt(1);
-      Long5.UONE = Long5.fromInt(1, true);
-      Long5.NEG_ONE = Long5.fromInt(-1);
-      Long5.MAX_VALUE = Long5.fromBits(4294967295 | 0, 2147483647 | 0, false);
-      Long5.MIN_VALUE = Long5.fromBits(0, 2147483648 | 0, false);
-      return Long5;
+      Long4.TWO_PWR_24 = Long4.fromInt(TWO_PWR_24_DBL);
+      Long4.MAX_UNSIGNED_VALUE = Long4.fromBits(4294967295 | 0, 4294967295 | 0, true);
+      Long4.ZERO = Long4.fromInt(0);
+      Long4.UZERO = Long4.fromInt(0, true);
+      Long4.ONE = Long4.fromInt(1);
+      Long4.UONE = Long4.fromInt(1, true);
+      Long4.NEG_ONE = Long4.fromInt(-1);
+      Long4.MAX_VALUE = Long4.fromBits(4294967295 | 0, 2147483647 | 0, false);
+      Long4.MIN_VALUE = Long4.fromBits(0, 2147483648 | 0, false);
+      return Long4;
     }();
-    exports.Long = Long4;
-    Object.defineProperty(Long4.prototype, "__isLong__", { value: true });
-    Object.defineProperty(Long4.prototype, "_bsontype", { value: "Long" });
+    exports.Long = Long3;
+    Object.defineProperty(Long3.prototype, "__isLong__", { value: true });
+    Object.defineProperty(Long3.prototype, "_bsontype", { value: "Long" });
   }
 });
 
@@ -2552,10 +2552,10 @@ var require_objectid = __commonJS({
     var checkForHexRegExp = new RegExp("^[0-9a-fA-F]{24}$");
     var PROCESS_UNIQUE = null;
     var kId = Symbol("id");
-    var ObjectId4 = function() {
-      function ObjectId5(inputId) {
-        if (!(this instanceof ObjectId5))
-          return new ObjectId5(inputId);
+    var ObjectId3 = function() {
+      function ObjectId4(inputId) {
+        if (!(this instanceof ObjectId4))
+          return new ObjectId4(inputId);
         var workingId;
         if (typeof inputId === "object" && inputId && "id" in inputId) {
           if (typeof inputId.id !== "string" && !ArrayBuffer.isView(inputId.id)) {
@@ -2570,7 +2570,7 @@ var require_objectid = __commonJS({
           workingId = inputId;
         }
         if (workingId == null || typeof workingId === "number") {
-          this[kId] = ObjectId5.generate(typeof workingId === "number" ? workingId : void 0);
+          this[kId] = ObjectId4.generate(typeof workingId === "number" ? workingId : void 0);
         } else if (ArrayBuffer.isView(workingId) && workingId.byteLength === 12) {
           this[kId] = workingId instanceof buffer_1.Buffer ? workingId : ensure_buffer_1.ensureBuffer(workingId);
         } else if (typeof workingId === "string") {
@@ -2589,24 +2589,24 @@ var require_objectid = __commonJS({
         } else {
           throw new error_1.BSONTypeError("Argument passed in does not match the accepted types");
         }
-        if (ObjectId5.cacheHexString) {
+        if (ObjectId4.cacheHexString) {
           this.__id = this.id.toString("hex");
         }
       }
-      Object.defineProperty(ObjectId5.prototype, "id", {
+      Object.defineProperty(ObjectId4.prototype, "id", {
         get: function() {
           return this[kId];
         },
         set: function(value) {
           this[kId] = value;
-          if (ObjectId5.cacheHexString) {
+          if (ObjectId4.cacheHexString) {
             this.__id = value.toString("hex");
           }
         },
         enumerable: false,
         configurable: true
       });
-      Object.defineProperty(ObjectId5.prototype, "generationTime", {
+      Object.defineProperty(ObjectId4.prototype, "generationTime", {
         get: function() {
           return this.id.readInt32BE(0);
         },
@@ -2616,24 +2616,24 @@ var require_objectid = __commonJS({
         enumerable: false,
         configurable: true
       });
-      ObjectId5.prototype.toHexString = function() {
-        if (ObjectId5.cacheHexString && this.__id) {
+      ObjectId4.prototype.toHexString = function() {
+        if (ObjectId4.cacheHexString && this.__id) {
           return this.__id;
         }
         var hexString = this.id.toString("hex");
-        if (ObjectId5.cacheHexString && !this.__id) {
+        if (ObjectId4.cacheHexString && !this.__id) {
           this.__id = hexString;
         }
         return hexString;
       };
-      ObjectId5.getInc = function() {
-        return ObjectId5.index = (ObjectId5.index + 1) % 16777215;
+      ObjectId4.getInc = function() {
+        return ObjectId4.index = (ObjectId4.index + 1) % 16777215;
       };
-      ObjectId5.generate = function(time) {
+      ObjectId4.generate = function(time) {
         if (typeof time !== "number") {
           time = Math.floor(Date.now() / 1e3);
         }
-        var inc = ObjectId5.getInc();
+        var inc = ObjectId4.getInc();
         var buffer = buffer_1.Buffer.alloc(12);
         buffer.writeUInt32BE(time, 0);
         if (PROCESS_UNIQUE === null) {
@@ -2649,28 +2649,28 @@ var require_objectid = __commonJS({
         buffer[9] = inc >> 16 & 255;
         return buffer;
       };
-      ObjectId5.prototype.toString = function(format) {
+      ObjectId4.prototype.toString = function(format) {
         if (format)
           return this.id.toString(format);
         return this.toHexString();
       };
-      ObjectId5.prototype.toJSON = function() {
+      ObjectId4.prototype.toJSON = function() {
         return this.toHexString();
       };
-      ObjectId5.prototype.equals = function(otherId) {
+      ObjectId4.prototype.equals = function(otherId) {
         if (otherId === void 0 || otherId === null) {
           return false;
         }
-        if (otherId instanceof ObjectId5) {
+        if (otherId instanceof ObjectId4) {
           return this[kId][11] === otherId[kId][11] && this[kId].equals(otherId[kId]);
         }
-        if (typeof otherId === "string" && ObjectId5.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
+        if (typeof otherId === "string" && ObjectId4.isValid(otherId) && otherId.length === 12 && utils_1.isUint8Array(this.id)) {
           return otherId === buffer_1.Buffer.prototype.toString.call(this.id, "latin1");
         }
-        if (typeof otherId === "string" && ObjectId5.isValid(otherId) && otherId.length === 24) {
+        if (typeof otherId === "string" && ObjectId4.isValid(otherId) && otherId.length === 24) {
           return otherId.toLowerCase() === this.toHexString();
         }
-        if (typeof otherId === "string" && ObjectId5.isValid(otherId) && otherId.length === 12) {
+        if (typeof otherId === "string" && ObjectId4.isValid(otherId) && otherId.length === 12) {
           return buffer_1.Buffer.from(otherId).equals(this.id);
         }
         if (typeof otherId === "object" && "toHexString" in otherId && typeof otherId.toHexString === "function") {
@@ -2680,75 +2680,75 @@ var require_objectid = __commonJS({
         }
         return false;
       };
-      ObjectId5.prototype.getTimestamp = function() {
+      ObjectId4.prototype.getTimestamp = function() {
         var timestamp = new Date();
         var time = this.id.readUInt32BE(0);
         timestamp.setTime(Math.floor(time) * 1e3);
         return timestamp;
       };
-      ObjectId5.createPk = function() {
-        return new ObjectId5();
+      ObjectId4.createPk = function() {
+        return new ObjectId4();
       };
-      ObjectId5.createFromTime = function(time) {
+      ObjectId4.createFromTime = function(time) {
         var buffer = buffer_1.Buffer.from([0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]);
         buffer.writeUInt32BE(time, 0);
-        return new ObjectId5(buffer);
+        return new ObjectId4(buffer);
       };
-      ObjectId5.createFromHexString = function(hexString) {
+      ObjectId4.createFromHexString = function(hexString) {
         if (typeof hexString === "undefined" || hexString != null && hexString.length !== 24) {
           throw new error_1.BSONTypeError("Argument passed in must be a single String of 12 bytes or a string of 24 hex characters");
         }
-        return new ObjectId5(buffer_1.Buffer.from(hexString, "hex"));
+        return new ObjectId4(buffer_1.Buffer.from(hexString, "hex"));
       };
-      ObjectId5.isValid = function(id) {
+      ObjectId4.isValid = function(id) {
         if (id == null)
           return false;
         try {
-          new ObjectId5(id);
+          new ObjectId4(id);
           return true;
         } catch (_a) {
           return false;
         }
       };
-      ObjectId5.prototype.toExtendedJSON = function() {
+      ObjectId4.prototype.toExtendedJSON = function() {
         if (this.toHexString)
           return { $oid: this.toHexString() };
         return { $oid: this.toString("hex") };
       };
-      ObjectId5.fromExtendedJSON = function(doc) {
-        return new ObjectId5(doc.$oid);
+      ObjectId4.fromExtendedJSON = function(doc) {
+        return new ObjectId4(doc.$oid);
       };
-      ObjectId5.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
+      ObjectId4.prototype[Symbol.for("nodejs.util.inspect.custom")] = function() {
         return this.inspect();
       };
-      ObjectId5.prototype.inspect = function() {
+      ObjectId4.prototype.inspect = function() {
         return 'new ObjectId("' + this.toHexString() + '")';
       };
-      ObjectId5.index = Math.floor(Math.random() * 16777215);
-      return ObjectId5;
+      ObjectId4.index = Math.floor(Math.random() * 16777215);
+      return ObjectId4;
     }();
-    exports.ObjectId = ObjectId4;
-    Object.defineProperty(ObjectId4.prototype, "generate", {
+    exports.ObjectId = ObjectId3;
+    Object.defineProperty(ObjectId3.prototype, "generate", {
       value: utils_1.deprecate(function(time) {
-        return ObjectId4.generate(time);
+        return ObjectId3.generate(time);
       }, "Please use the static `ObjectId.generate(time)` instead")
     });
-    Object.defineProperty(ObjectId4.prototype, "getInc", {
+    Object.defineProperty(ObjectId3.prototype, "getInc", {
       value: utils_1.deprecate(function() {
-        return ObjectId4.getInc();
+        return ObjectId3.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId4.prototype, "get_inc", {
+    Object.defineProperty(ObjectId3.prototype, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId4.getInc();
+        return ObjectId3.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId4, "get_inc", {
+    Object.defineProperty(ObjectId3, "get_inc", {
       value: utils_1.deprecate(function() {
-        return ObjectId4.getInc();
+        return ObjectId3.getInc();
       }, "Please use the static `ObjectId.getInc()` instead")
     });
-    Object.defineProperty(ObjectId4.prototype, "_bsontype", { value: "ObjectID" });
+    Object.defineProperty(ObjectId3.prototype, "_bsontype", { value: "ObjectID" });
   }
 });
 
@@ -12006,7 +12006,7 @@ var require_db = __commonJS({
       "compression",
       "retryWrites"
     ];
-    var Db4 = class {
+    var Db3 = class {
       constructor(client, databaseName, options) {
         var _a;
         options = options !== null && options !== void 0 ? options : {};
@@ -12174,13 +12174,13 @@ var require_db = __commonJS({
         return this.s.logger;
       }
     };
-    exports.Db = Db4;
-    Db4.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
-    Db4.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
-    Db4.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
-    Db4.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
-    Db4.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
-    Db4.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
+    exports.Db = Db3;
+    Db3.SYSTEM_NAMESPACE_COLLECTION = CONSTANTS.SYSTEM_NAMESPACE_COLLECTION;
+    Db3.SYSTEM_INDEX_COLLECTION = CONSTANTS.SYSTEM_INDEX_COLLECTION;
+    Db3.SYSTEM_PROFILE_COLLECTION = CONSTANTS.SYSTEM_PROFILE_COLLECTION;
+    Db3.SYSTEM_USER_COLLECTION = CONSTANTS.SYSTEM_USER_COLLECTION;
+    Db3.SYSTEM_COMMAND_COLLECTION = CONSTANTS.SYSTEM_COMMAND_COLLECTION;
+    Db3.SYSTEM_JS_COLLECTION = CONSTANTS.SYSTEM_JS_COLLECTION;
     function validateDatabaseName(databaseName) {
       if (typeof databaseName !== "string")
         throw new error_1.MongoInvalidArgumentError("Database name must be a string");
@@ -26664,9 +26664,6 @@ var connectToDatabase = async () => {
   return cachedDb;
 };
 
-// server/functions/bill/get-bills.ts
-var import_mongodb = __toESM(require_lib3());
-
 // server/constant/index.ts
 var ITEM_PER_PAGE = 10;
 
@@ -26687,6 +26684,12 @@ var BillRepository = class {
   async findPaginated(page) {
     return await this.bills.find().sort({ date: -1 }).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
   }
+  async findPaginatedWithKeyword(page, keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    return await this.bills.find(keyword ? query : {}).sort({ date: -1 }).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  }
   async getTotalPage() {
     const total = await this.bills.countDocuments();
     return Math.ceil(total / ITEM_PER_PAGE);
@@ -26702,53 +26705,17 @@ var BillRepository = class {
 };
 var BillRepository_default = BillRepository;
 
-// server/repository/PlaceRepository.ts
-var PlaceRepository = class {
-  constructor(db) {
-    this.places = db.collection(PLACES);
-  }
-  async findById(id) {
-    const query = {
-      _id: id
-    };
-    return await this.places.findOne(query);
-  }
-  async findPaginatedWithKeyword(page, keyword) {
-    const query = {
-      name: { $regex: keyword }
-    };
-    return await this.places.find(keyword ? query : {}).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
-  }
-  async getTotalPage(keyword) {
-    const query = {
-      name: { $regex: keyword }
-    };
-    const total = await this.places.countDocuments(keyword ? query : {});
-    return Math.ceil(total / ITEM_PER_PAGE);
-  }
-  async save(place) {
-    const result = await this.places.insertOne(place);
-    return result.insertedId;
-  }
-  async update(placeId, place) {
-    const query = { _id: placeId };
-    return await this.places.updateOne(query, { $set: place });
-  }
-};
-var PlaceRepository_default = PlaceRepository;
-
 // server/functions/bill/get-bills.ts
 var getBills = async (db, queryStringParameters) => {
-  const { page } = queryStringParameters;
+  const { page = 1, keyword } = queryStringParameters;
   const billRepository = new BillRepository_default(db);
-  const bills = await billRepository.findPaginated(page);
+  const bills = await billRepository.findPaginatedWithKeyword(page, keyword);
   const totalPage = await billRepository.getTotalPage();
-  const placeRepository = new PlaceRepository_default(db);
   const data = await Promise.all(bills.map(async (bill) => {
-    const placeId = new import_mongodb.ObjectId(bill.placeId);
-    const place = await placeRepository.findById(placeId);
+    var _a;
     return {
-      placeName: place !== null ? place.name : null,
+      id: ((_a = bill._id) == null ? void 0 : _a.toString()) || "",
+      placeName: bill.place.name,
       date: bill.date
     };
   }));
@@ -26768,7 +26735,7 @@ var getBills = async (db, queryStringParameters) => {
 var get_bills_default = getBills;
 
 // server/functions/bill/save-bill.ts
-var import_mongodb2 = __toESM(require_lib3());
+var import_mongodb = __toESM(require_lib3());
 
 // server/helper/date.ts
 var normalizeDate = (epoch) => {
@@ -26813,15 +26780,62 @@ var BillDetailRepository = class {
 };
 var BillDetailRepository_default = BillDetailRepository;
 
+// server/repository/PlaceRepository.ts
+var PlaceRepository = class {
+  constructor(db) {
+    this.places = db.collection(PLACES);
+  }
+  async findById(id) {
+    const query = {
+      _id: id
+    };
+    return await this.places.findOne(query);
+  }
+  async findPaginatedWithKeyword(page, keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    return await this.places.find(keyword ? query : {}).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  }
+  async getTotalPage(keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    const total = await this.places.countDocuments(keyword ? query : {});
+    return Math.ceil(total / ITEM_PER_PAGE);
+  }
+  async save(place) {
+    const result = await this.places.insertOne(place);
+    return result.insertedId;
+  }
+  async update(placeId, place) {
+    const query = { _id: placeId };
+    return await this.places.updateOne(query, { $set: place });
+  }
+};
+var PlaceRepository_default = PlaceRepository;
+
 // server/functions/bill/save-bill.ts
 var saveBill = async (db, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const billRepository = new BillRepository_default(db);
   const billDetailRepository = new BillDetailRepository_default(db);
+  const placeRepository = new PlaceRepository_default(db);
   const persons = body.persons || [];
+  const place = await placeRepository.findById(new import_mongodb.ObjectId(body.placeId));
+  if (place == null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Place not found" })
+    };
+  }
   const bill = {
-    placeId: new import_mongodb2.ObjectId(body.placeId),
-    date: import_mongodb2.Long.fromNumber(normalizeDate(body.date).getTime()),
+    place: {
+      name: place.name,
+      percentage: place.percentage,
+      taxPriority: place.taxPriority
+    },
+    date: import_mongodb.Long.fromNumber(normalizeDate(body.date).getTime()),
     persons: persons.map((p) => p.name)
   };
   const billId = await billRepository.save(bill);
@@ -26832,7 +26846,7 @@ var saveBill = async (db, bodyString) => {
       menu: {
         _id: id,
         name,
-        price: import_mongodb2.Long.fromNumber(price),
+        price: import_mongodb.Long.fromNumber(price),
         placeId: body.placeId
       }
     }));
@@ -26849,18 +26863,30 @@ var saveBill = async (db, bodyString) => {
 var save_bill_default = saveBill;
 
 // server/functions/bill/update-bill.ts
-var import_mongodb3 = __toESM(require_lib3());
+var import_mongodb2 = __toESM(require_lib3());
 var updateBill = async (db, queryStringParameters, bodyString) => {
   const body = JSON.parse(bodyString || "");
   const { billId: billIdString } = queryStringParameters;
-  const billId = new import_mongodb3.ObjectId(billIdString);
+  const billId = new import_mongodb2.ObjectId(billIdString);
   const billRepository = new BillRepository_default(db);
   const billDetailRepository = new BillDetailRepository_default(db);
+  const placeRepository = new PlaceRepository_default(db);
   const persons = body.persons || [];
+  const place = await placeRepository.findById(new import_mongodb2.ObjectId(body.placeId));
+  if (place == null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: "Place not found" })
+    };
+  }
   let bill = await billRepository.findById(billId);
   bill = {
-    placeId: new import_mongodb3.ObjectId(body.placeId),
-    date: import_mongodb3.Long.fromNumber(normalizeDate(body.date).getTime()),
+    place: {
+      name: place.name,
+      percentage: place.percentage,
+      taxPriority: place.taxPriority
+    },
+    date: import_mongodb2.Long.fromNumber(normalizeDate(body.date).getTime()),
     persons: persons.map((p) => p.name)
   };
   await billRepository.update(billId, bill);
@@ -26872,7 +26898,7 @@ var updateBill = async (db, queryStringParameters, bodyString) => {
       menu: {
         _id: id,
         name,
-        price: import_mongodb3.Long.fromNumber(price),
+        price: import_mongodb2.Long.fromNumber(price),
         placeId: body.placeId
       }
     }));

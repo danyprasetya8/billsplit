@@ -24,6 +24,17 @@ class BillRepository {
       .toArray()
   }
 
+  public async findPaginatedWithKeyword(page: number, keyword: string): Promise<Bill[]> {
+    const query: Filter<Bill> = {
+      name: { $regex: keyword }
+    }
+    return await this.bills.find(keyword ? query : {})
+      .sort({ date: -1 })
+      .skip(page > 0 ? (( page - 1 ) * ITEM_PER_PAGE ) : 0)
+      .limit(ITEM_PER_PAGE)
+      .toArray()
+  }
+
   public async getTotalPage(): Promise<number> {
     const total = await this.bills.countDocuments()
     return Math.ceil(total / ITEM_PER_PAGE)

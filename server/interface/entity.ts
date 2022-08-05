@@ -24,9 +24,16 @@ export interface Menu {
 
 export interface Bill {
   _id?: ObjectId | string,
-  placeId: ObjectId | string,
   date: Long,
-  persons: string[]
+  persons: string[],
+  place: {
+    name: string,
+    percentage: {
+      tax: Double,
+      service: Double
+    },
+    taxPriority: TaxPriority
+  }
 }
 
 export interface BillDetail {

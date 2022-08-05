@@ -26718,6 +26718,12 @@ var BillRepository = class {
   async findPaginated(page) {
     return await this.bills.find().sort({ date: -1 }).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
   }
+  async findPaginatedWithKeyword(page, keyword) {
+    const query = {
+      name: { $regex: keyword }
+    };
+    return await this.bills.find(keyword ? query : {}).sort({ date: -1 }).skip(page > 0 ? (page - 1) * ITEM_PER_PAGE : 0).limit(ITEM_PER_PAGE).toArray();
+  }
   async getTotalPage() {
     const total = await this.bills.countDocuments();
     return Math.ceil(total / ITEM_PER_PAGE);

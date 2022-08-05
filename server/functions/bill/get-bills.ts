@@ -1,34 +1,31 @@
-import { Db, Long, ObjectId } from 'mongodb'
+import { Db, Long } from 'mongodb'
 import { ITEM_PER_PAGE } from '../../constant'
 import { Bill } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import BillRepository from '../../repository/BillRepository'
-import PlaceRepository from '../../repository/PlaceRepository'
 
 interface GetBillsResponse {
+  id: string,
   placeName: string | null,
   date: Long
 }
 
 interface QueryParameters {
-  page: number
+  page: number,
+  keyword: string
 }
 
 const getBills = async (db: Db, queryStringParameters) => {
-  const { page } = queryStringParameters as QueryParameters
+  const { page = 1, keyword } = queryStringParameters as QueryParameters
 
   const billRepository = new BillRepository(db)
-  const bills: Bill[] = await billRepository.findPaginated(page)
+  const bills: Bill[] = await billRepository.findPaginatedWithKeyword(page, keyword)
   const totalPage = await billRepository.getTotalPage()
 
-  const placeRepository = new PlaceRepository(db)
-
   const data: GetBillsResponse[] = await Promise.all(bills.map(async bill => {
-    const placeId = new ObjectId(bill.placeId)
-    const place = await placeRepository.findById(placeId)
-
     return {
-      placeName: place !== null ? place.name : null,
+      id: bill._id?.toString() || '',
+      placeName: bill.place.name,
       date: bill.date
     }
   }))

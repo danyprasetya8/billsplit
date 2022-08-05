@@ -4,6 +4,7 @@ import { normalizeDate } from '../../helper/date'
 import BillDetailRepository from '../../repository/BillDetailRepository'
 import BillRepository from '../../repository/BillRepository'
 import { BillDetail } from '../../interface/entity'
+import PlaceRepository from '../../repository/PlaceRepository'
 
 interface MenuRequestBody {
   id: string,
@@ -34,12 +35,26 @@ const updateBill = async (db: Db, queryStringParameters, bodyString: string | nu
 
   const billRepository = new BillRepository(db)
   const billDetailRepository = new BillDetailRepository(db)
+  const placeRepository = new PlaceRepository(db)
 
   const persons = body.persons || []
 
+  const place = await placeRepository.findById(new ObjectId(body.placeId))
+
+  if (place == null) {
+    return {
+      statusCode: 400,
+      body: JSON.stringify({ error: 'Place not found'  })
+    }
+  }
+
   let bill = await billRepository.findById(billId)
   bill = {
-    placeId: new ObjectId(body.placeId),
+    place: {
+      name: place.name,
+      percentage: place.percentage,
+      taxPriority: place.taxPriority
+    },
     date: Long.fromNumber(normalizeDate(body.date).getTime()),
     persons: persons.map(p => p.name)
   }
