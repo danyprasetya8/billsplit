@@ -1,1 +1,0 @@
-module.exports = require('./src/server/functions/bill/index.js')
