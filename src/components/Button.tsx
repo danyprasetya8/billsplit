@@ -17,6 +17,10 @@ const Button: React.FC<ButtonProps> = props => {
             color: #FFF;
             background-color: #009FA7;
           }
+          .btn.disabled, .btn:disabled {
+            background: #CCC;
+            border: 1px solid #CCC;
+          }
           .btn-primary-outline-d {
             background-color: #FFF;
             border: 1px solid #00ADB5;

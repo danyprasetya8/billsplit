@@ -1,6 +1,7 @@
 import { Handler } from '@netlify/functions'
 import { ObjectId } from 'mongodb'
 import { connectToDatabase } from '../../database/mongo'
+import { TaxPriority } from '../../interface/entity'
 import { BaseResponse } from '../../interface/response'
 import BillDetailRepository from '../../repository/BillDetailRepository'
 import BillRepository from '../../repository/BillRepository'
@@ -17,7 +18,14 @@ interface GetPersonResponse {
 }
 
 interface GetBillDetailResponse {
-  placeId: string,
+  place: {
+    name: string,
+    percentage: {
+      tax: number,
+      service: number
+    },
+    taxPriority: TaxPriority
+  },
   persons: GetPersonResponse[]
 }
 
@@ -46,7 +54,14 @@ const handler: Handler = async function({ queryStringParameters }) {
 
   const response: BaseResponse<GetBillDetailResponse> = {
     data: {
-      placeId: bill.placeId.toString(),
+      place: {
+        name: bill.place.name,
+        percentage: {
+          tax: bill.place.percentage.tax.value,
+          service: bill.place.percentage.service.value
+        },
+        taxPriority: bill.place.taxPriority
+      },
       persons: persons.map(person => ({
         name: person._id,
         menus: person.menus

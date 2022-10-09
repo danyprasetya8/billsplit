@@ -6,7 +6,9 @@ const constant = {
     createPlace: '/place/create',
     updatePlace: '/place/update/:placeId',
     bill: '/bill',
-    billDetail: '/bill/:billId'
+    billDetail: '/bill/:billId',
+    createBill: '/bill/create',
+    addPerson: '/bill/person/:placeId'
   }
 }
 

@@ -67,7 +67,7 @@ const BillList = () => {
         </SearchBar>
 
         <Button css={`width: 15%;`}>
-          <Link to={page.createPlace} css={addBillBtnStyle}>
+          <Link to={page.createBill} css={addBillBtnStyle}>
             Add Bill
           </Link>
         </Button>

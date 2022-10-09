@@ -1,23 +1,16 @@
 import { useAppDispatch } from '@/hooks'
-import { useParams } from 'react-router-dom'
 import { getPlaceDetail } from '@/store/slices/place'
 import { GetPlaceDetailResponse } from '@/interfaces/response'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import { Container } from '@/util/style'
 import React, { useEffect, useState } from 'react'
 import CreateMenu from '@/components/CreateMenu'
 import Button from '@/components/Button'
 import Header from '@/components/Header'
 import MenuList from '@/components/MenuList'
-import styled from 'styled-components'
 import constant from '@/config/constant'
 
 const { page } = constant
-
-const Container = styled.div`
-  width: 100%;
-  padding: 0 50px;
-  margin: 25px 0;
-`
 
 const PlaceDetail: React.FC = () => {
   const { placeId } = useParams<{ placeId: string }>()

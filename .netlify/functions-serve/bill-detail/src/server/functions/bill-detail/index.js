@@ -26756,7 +26756,14 @@ var handler = async function({ queryStringParameters }) {
   }
   const response = {
     data: {
-      placeId: bill.placeId.toString(),
+      place: {
+        name: bill.place.name,
+        percentage: {
+          tax: bill.place.percentage.tax.value,
+          service: bill.place.percentage.service.value
+        },
+        taxPriority: bill.place.taxPriority
+      },
       persons: persons.map((person) => ({
         name: person._id,
         menus: person.menus

@@ -26675,6 +26675,9 @@ var PlaceRepository = class {
   constructor(db) {
     this.places = db.collection(PLACES);
   }
+  async findAll() {
+    return this.places.find().toArray();
+  }
   async findById(id) {
     const query = {
       _id: id

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { BaseResponse, GetPlacesResponse, GetPlaceDetailResponse } from '@/interfaces/response'
+import { BaseResponse, GetPlacesResponse, GetPlaceDetailResponse, GetPlaceAutoSuggestResponse } from '@/interfaces/response'
 import axios from '@/axios'
 import api from '@/config/api'
 
@@ -22,6 +22,14 @@ export const getPlaceDetail = createAsyncThunk(
     const response = await axios.get<BaseResponse<GetPlaceDetailResponse>>(api.placeDetail, {
       params: { placeId }
     })
+    return response.data
+  }
+)
+
+export const getPlaceAutoSuggest = createAsyncThunk(
+  'places/getPlaceAutoSuggest',
+  async () => {
+    const response = await axios.get<BaseResponse<GetPlaceAutoSuggestResponse[]>>(api.placeAutoSuggesst)
     return response.data
   }
 )

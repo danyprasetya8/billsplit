@@ -16,3 +16,14 @@ export const SearchBar = styled.div`
   align-items: center;
   width: 30%;
 `
+
+interface LineProps {
+  color?: string
+}
+
+export const Line = styled.div<LineProps>`
+  width: 100%;
+  height: 4px;
+  background-color: ${props => props.color ? props.color : '#F5F5F5'};
+  margin: 15px 0 25px;
+`

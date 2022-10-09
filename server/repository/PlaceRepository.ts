@@ -11,6 +11,11 @@ class PlaceRepository {
     this.places = db.collection<Place>(PLACES)
   }
 
+  public async findAll(): Promise<Place[]> {
+    return this.places.find()
+      .toArray()
+  }
+
   public async findById(id: ObjectId): Promise<Place | null> {
     const query: Filter<Place> = {
       _id: id

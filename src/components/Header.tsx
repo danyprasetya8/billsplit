@@ -1,5 +1,6 @@
 import { ChevronLeft } from 'react-bootstrap-icons'
 import { Link } from 'react-router-dom'
+import { Line } from '@/util/style'
 import React from 'react'
 import styled from 'styled-components'
 
@@ -7,13 +8,6 @@ const Title = styled.div`
   font-size: 32px;
   font-weight: 600;
   color: #00ADB5;
-`
-
-const Line = styled.div`
-  width: 100%;
-  height: 4px;
-  background-color: #00ADB5;
-  margin: 15px 0 25px;
 `
 
 interface Props {
@@ -44,7 +38,7 @@ const Header: React.FC<Props> = props => {
         </Title>
       </div>
 
-      <Line />
+      <Line color='#00ADB5' />
     </>
   )
 }

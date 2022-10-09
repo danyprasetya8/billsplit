@@ -5,22 +5,14 @@ import { TaxPriority } from '@/enums'
 import { getPlaceDetail, savePlace, updatePlace } from '@/store/slices/place'
 import { useAppDispatch } from '@/hooks'
 import { Formik, Form, Field, ErrorMessage } from 'formik'
+import { Container } from '@/util/style'
+import { GetPlaceDetailResponse } from '@/interfaces/response'
 import React, { useEffect, useState } from 'react'
 import Button from 'react-bootstrap/Button'
 import Header from '@/components/Header'
-import styled from 'styled-components'
 import constant from '@/config/constant'
-import { GetPlaceDetailResponse } from '@/interfaces/response'
 
 const { page } = constant
-
-const Container = styled.div`
-  width: 100%;
-  padding: 0 50px;
-  margin: 25px 0;
-  display: flex;
-  flex-direction: column;
-`
 
 interface FormType {
   name: string,

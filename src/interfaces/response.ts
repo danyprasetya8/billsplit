@@ -35,3 +35,26 @@ export interface GetBillsResponse {
   placeName: string | null,
   date: number
 }
+
+export interface GetBillDetailResponse {
+  place: {
+    name: string,
+    percentage: {
+      tax: number,
+      service: number
+    },
+    taxPriority: TaxPriority
+  },
+  persons: GetPersonResponse[]
+}
+
+export interface GetPersonResponse {
+  name: string,
+  menus: GetMenuWebResponse[]
+}
+
+export interface GetPlaceAutoSuggestResponse {
+  name: string,
+  id: string
+}
+

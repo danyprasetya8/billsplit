@@ -4,6 +4,7 @@ import { useAppDispatch } from '@/hooks'
 import { BaseResponse, GetPlacesResponse } from '@/interfaces/response'
 import { ChevronRight, Search } from 'react-bootstrap-icons'
 import { Link } from 'react-router-dom'
+import { Container } from '@/util/style'
 import Button from '@/components/Button'
 import Card from 'react-bootstrap/Card'
 import Header from '@/components/Header'
@@ -21,14 +22,6 @@ const addPlaceBtnStyle = css`
   &:hover {
     color: #FFF;
   }
-`
-
-const Container = styled.div`
-  width: 100%;
-  padding: 0 50px;
-  margin: 25px 0;
-  display: flex;
-  flex-direction: column;
 `
 
 const PlaceLink = styled(Link)`

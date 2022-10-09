@@ -1,4 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import AddPerson from '@/pages/AddPerson'
+import CreateBill from '@/pages/CreateBill'
 import CreatePlace from '@/pages/CreatePlace'
 import PlaceDetail from '@/pages/PlaceDetail'
 import PlaceList from '@/pages/PlaceList/PlaceList'
@@ -21,6 +23,8 @@ const App: React.FC = () => {
             <Route path={page.createPlace} element={<CreatePlace />} />
             <Route path={page.updatePlace} element={<CreatePlace />} />
             <Route path={page.bill} element={<BillList />} />
+            <Route path={page.createBill} element={<CreateBill />} />
+            <Route path={page.addPerson} element={<AddPerson />} />
           </Route>
         </Routes>
       </div>
